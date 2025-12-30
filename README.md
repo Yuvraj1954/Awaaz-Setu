@@ -13,8 +13,6 @@
 * **🔄 Intelligent Synchronization:** Designed for intermittent connectivity. Sarthi queues user data and automatically syncs with the cloud the moment a network connection is momentarily restored.
 * **⚡ Low-Bandwidth Optimization:** Engineered to run on 2G networks and budget-friendly Android devices.
 
-🔗 **LIVE WEB DEMO:** [https://appetize.io/app/b_gpuouvzafwqxb4lafms5oalmwu](https://appetize.io/app/b_gpuouvzafwqxb4lafms5oalmwu)
-
 ---
 
 ## 💻 AwaazSetu: The Web Gateway
