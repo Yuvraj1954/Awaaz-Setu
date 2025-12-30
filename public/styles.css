@@ -620,3 +620,23 @@ textarea:focus {
 .mic-click-animate {
     animation: micPulseClick 0.4s ease;
 }
+/* ===============================
+   PAUSE / STOP BUTTON
+   =============================== */
+.pause-btn {
+    margin-top: 1rem;
+    padding: 0.45rem 1.2rem;
+    border-radius: 999px;
+    border: 1.5px solid #ef4444;
+    background: #fff5f5;
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pause-btn:hover {
+    background: #fee2e2;
+    transform: scale(1.03);
+}
