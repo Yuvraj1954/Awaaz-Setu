@@ -106,8 +106,8 @@ function speakText(text, language) {
         if (preferredVoice) utterance.voice = preferredVoice;
 
         utterance.lang = 'en-IN';
-        utterance.rate = 0.95;
-        utterance.pitch = 1.0;
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
     } else {
         // Hindi already sounds good
         const hindiVoice = voices.find(v => v.lang === 'hi-IN');
