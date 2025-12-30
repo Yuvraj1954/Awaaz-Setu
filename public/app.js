@@ -166,23 +166,19 @@ async function submitQuery() {
 }
 
 /*********************************
- FORCE STOP (PAUSE BUTTON)
+ FORCE STOP (PAUSE)
 **********************************/
 function forceStopAll() {
     paused = true;
-
     if (recognition && isListening) recognition.stop();
     if ('speechSynthesis' in window) speechSynthesis.cancel();
-
     document.getElementById('loading').style.display = 'none';
     document.getElementById('mic-label').textContent =
         translations[currentLanguage].micLabel;
 }
 
-document.getElementById("pause-btn").addEventListener("click", forceStopAll);
-
 /*********************************
- PROMPTS (30 — SAFE)
+ PROMPTS
 **********************************/
 const promptPool = [
     "नमस्ते","Hello","Emergency number","Police number","Ambulance number",
@@ -202,25 +198,57 @@ function loadRandomPrompts() {
         el.textContent = shuffled[i];
         el.onclick = () => {
             if (paused) return;
-
             document.getElementById('user-input').value = el.textContent;
             currentLanguage = /[\u0900-\u097F]/.test(el.textContent) ? 'hi' : 'en';
             updateLanguage();
-
-            const mic = document.querySelector('.mic-circle');
-            mic.classList.add('mic-click-animate');
-            setTimeout(() => mic.classList.remove('mic-click-animate'), 400);
-
             submitQuery();
         };
     });
 }
 
 /*********************************
- INIT
+ INIT — FIXES ALL BUTTONS
 **********************************/
 window.addEventListener('load', () => {
+
     paused = false;
     updateLanguage();
     loadRandomPrompts();
+
+    // LANGUAGE BUTTONS
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-btn')
+                .forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLanguage = btn.dataset.lang;
+            updateLanguage();
+        });
+    });
+
+    // REPEAT BUTTON
+    const speakerBtn = document.getElementById('speaker-btn');
+    if (speakerBtn) {
+        speakerBtn.addEventListener('click', () => {
+            const text = document.getElementById('response-text').textContent;
+            if (text) speakText(text, currentLanguage);
+        });
+    }
+
+    // ASK ANOTHER QUESTION
+    const newQueryBtn = document.getElementById('new-query-btn');
+    if (newQueryBtn) {
+        newQueryBtn.addEventListener('click', () => {
+            if ('speechSynthesis' in window) speechSynthesis.cancel();
+            document.getElementById('response-section').style.display = 'none';
+            document.getElementById('user-input').value = '';
+            paused = false;
+        });
+    }
+
+    // PAUSE BUTTON (SAFE)
+    const pauseBtn = document.getElementById('pause-btn');
+    if (pauseBtn) {
+        pauseBtn.addEventListener('click', forceStopAll);
+    }
 });
