@@ -43,31 +43,51 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
     recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.interimResults = true; // Enabled interim results for better responsiveness
 
     recognition.onstart = () => {
         isListening = true;
         document.querySelector('.mic-circle').style.background = '#ef4444';
         document.getElementById('mic-label').textContent = translations[currentLanguage].listening;
+        console.log('Speech recognition started');
     };
 
     recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('user-input').value = transcript;
-        // Do not switch to text mode automatically anymore, just fill the box
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                finalTranscript += event.results[i][0].transcript;
+            } else {
+                interimTranscript += event.results[i][0].transcript;
+            }
+        }
+        
+        const transcript = finalTranscript || interimTranscript;
+        if (transcript) {
+            document.getElementById('user-input').value = transcript;
+        }
     };
 
     recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
-        if (event.error === 'not-allowed') {
+        
+        // Handle specific errors
+        if (event.error === 'network') {
+            console.warn('Network error during speech recognition. This can happen in some browser environments or with poor connectivity.');
+            // Don't alert immediately as it might be transient, just stop UI
+        } else if (event.error === 'not-allowed') {
             alert(currentLanguage === 'en' 
                 ? 'Microphone access denied. Please enable it in browser settings.' 
                 : 'माइक्रोफोन एक्सेस अस्वीकार कर दिया गया। कृपया ब्राउज़र सेटिंग्स में इसे सक्षम करें।');
         }
+        
         stopListening();
     };
 
     recognition.onend = () => {
+        console.log('Speech recognition ended');
         stopListening();
     };
 }
