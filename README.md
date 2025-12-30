@@ -10,6 +10,90 @@ Please allow microphone access when prompted.
 
 ---
 
+## 🎙️ Supported Voice & Text Questions
+
+AwaazSetu currently supports the following **exact questions and voice commands**.  
+You can either **speak** or **click** these prompts.
+
+### 🔹 Emergency & Safety
+- Emergency number  
+- Emergency numbers in India  
+- Police number  
+- Call police  
+- Ambulance number  
+- Call ambulance  
+- Hospital near me  
+- Government hospital  
+- Nearest hospital  
+- Women helpline  
+- Call women helpline  
+- Child helpline  
+- Call child helpline  
+
+### 🔹 Women & Pregnancy
+- Pregnancy help  
+- Pregnancy care  
+- Pregnant women help  
+- Government pregnancy scheme  
+- Free pregnancy checkup  
+
+### 🔹 Child & Vaccination
+- Child health  
+- Child care  
+- Child vaccination  
+- Baby vaccination  
+- Vaccination schedule  
+- Free child vaccination  
+
+### 🔹 Health Issues
+- I have fever  
+- Fever treatment  
+- Cold and cough  
+- Headache  
+- Stomach pain  
+- Health emergency  
+- Free treatment scheme  
+
+### 🔹 Government Schemes
+- Ayushman Bharat  
+- What is Ayushman Bharat  
+- Free treatment under Ayushman  
+- Health card  
+- PM Awas Yojana  
+- Housing scheme  
+- Government housing help  
+
+### 🔹 Documents & Certificates
+- Ration card  
+- Ration card kaise banaye  
+- Income certificate  
+- Income certificate apply  
+- Birth certificate  
+- Birth certificate apply  
+- Aadhaar card  
+- Aadhaar update  
+- Voter ID  
+- Voter ID apply  
+
+### 🔹 Pension & Senior Citizens
+- Old age pension  
+- Pension scheme  
+- Senior citizen help  
+- Government pension  
+
+### 🔹 General
+- Hello  
+- Hi  
+- Namaste  
+- Help  
+- What can you do  
+
+> 📝 Note:  
+> The system is **keyword-based** and optimized for **low bandwidth environments**.  
+> If a question is not recognized, the app safely guides the user to supported services.
+
+---
+
 ## 🌟 Overview
 
 **AwaazSetu** is a **voice-first digital assistant** built to make **government services, healthcare guidance, and emergency information** accessible to everyone — especially **rural and non-tech users**.
