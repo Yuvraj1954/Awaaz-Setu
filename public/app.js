@@ -98,10 +98,18 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         stopListening();
     };
 
-    recognition.onend = () => {
-        console.log('Speech recognition ended');
-        stopListening();
-    };
+recognition.onend = () => {
+    console.log('Speech recognition ended');
+    stopListening();
+
+    const text = document.getElementById('user-input').value.trim();
+
+    // ✅ Auto-submit only if user actually spoke something
+    if (text.length > 0) {
+        submitQuery();
+    }
+};
+
 }
 
 function stopListening() {
