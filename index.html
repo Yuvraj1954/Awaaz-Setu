@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AwaazSetu - Voice Bridge to Services</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="browser-warning">
+        <div class="warning-text">
+            <span class="warning-icon">⚠️</span>
+            <span class="warning-message">Please use Google Chrome browser for the best experience. Voice features work best on Chrome.</span>
+            <span class="warning-icon">⚠️</span>
+            <span class="warning-message">Please use Google Chrome browser for the best experience. Voice features work best on Chrome.</span>
+        </div>
+    </div>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <div class="logo-text">
+                    <h1 id="app-title">AwaazSetu</h1>
+                    <p id="app-subtitle">Your Voice Bridge to Services</p>
+                </div>
+            </div>
+            <div class="language-pill">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="hi">हिंदी</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <section class="selection-grid">
+                <div class="section-title">
+                    <i class="fas fa-th-large"></i>
+                    <span id="service-title-label">Choose Service</span>
+                </div>
+                <div class="service-selector">
+                    <button class="service-btn active" data-service="government">
+                        <div class="btn-icon">
+                            <i class="fas fa-building-columns"></i>
+                        </div>
+                        <span id="govt-label">Government Services</span>
+                    </button>
+                    <button class="service-btn" data-service="healthcare">
+                        <div class="btn-icon">
+                            <i class="fas fa-house-medical"></i>
+                        </div>
+                        <span id="health-label">Healthcare</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="interaction-card">
+                <div class="input-section">
+                    <div class="mic-container" id="mic-button">
+                        <div class="pulse-ring"></div>
+                        <div class="mic-circle">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <p id="mic-label">Tap to Speak</p>
+                    </div>
+
+                    <div class="text-input-section" id="text-input-section" style="display: none;">
+                        <div class="input-header">
+                            <label id="input-label" for="user-input">How can we help you?</label>
+                        </div>
+                        <textarea id="user-input" rows="3" placeholder="Type your question here..."></textarea>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary" id="cancel-btn">
+                                <i class="fas fa-times"></i>
+                                <span id="cancel-text">Cancel</span>
+                            </button>
+                            <button class="btn btn-primary" id="submit-btn">
+                                <span id="submit-text">Ask Question</span>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="response-section" id="response-section" style="display: none;">
+                    <div class="response-content">
+                        <div class="response-header">
+                            <i class="fas fa-comment-dots"></i>
+                            <h3 id="response-title">Response</h3>
+                        </div>
+                        <div class="response-body">
+                            <p id="response-text"></p>
+                        </div>
+                        <button class="btn btn-primary-outline" id="new-query-btn">
+                            <i class="fas fa-redo"></i>
+                            <span id="new-query-text">Ask Another Question</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="loading-overlay" id="loading" style="display: none;">
+                    <div class="loader">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <p id="loading-text">Finding information...</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; 2025 AwaazSetu • Simple • Voice • Local</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
