@@ -1,48 +1,68 @@
-# AwaazSetu - Voice Bridge to Services
+# 🇮🇳 AwaazSetu – Voice Bridge to Services
+
+## 🔴 LIVE DEMO (Working)
+
+**🔗 https://awaaz-setu.onrender.com/**
+
+👉 Please open in **Google Chrome** and allow microphone access for the best experience.
+
+---
 
 ## Overview
-AwaazSetu is a voice-first platform designed to empower rural users in India by providing seamless access to essential government and healthcare information. By bridging the gap between complex digital services and local languages, it ensures that technology serves those who need it most.
+AwaazSetu is a **voice-first digital platform** designed to empower rural and non-tech users in India by providing **seamless access to essential government and healthcare information**.  
+By bridging the gap between complex digital services and **local languages**, AwaazSetu ensures that technology truly serves the last mile.
+
+---
 
 ## Problem Statement
-In rural India, millions of people struggle to access government schemes and healthcare guidance due to digital literacy barriers, complex website interfaces, and language gaps. Traditional search engines and portals are often too complicated for users who are more comfortable with spoken language than typing.
+In rural India, millions of citizens struggle to access government schemes and healthcare guidance due to:
+- Low digital literacy
+- Complex government portals
+- Language barriers
+
+Traditional search engines and websites assume typing, reading, and navigation skills that many users do not have. For most users, **spoken language is far more natural than text**.
+
+---
 
 ## Why Voice-First for India?
-- **Digital Literacy**: Many users find speaking more natural than navigating complex menus or typing.
-- **Local Languages**: Voice allows for better accessibility in local dialects and languages like Hindi.
-- **Low Friction**: Eliminates the need for learning complex UI patterns.
-- **Trust**: Hearing information in a familiar language and tone builds trust in the information provided.
+- **Digital Literacy:** Speaking is easier than typing or navigating complex menus  
+- **Local Languages:** Voice enables accessibility in Hindi and other Indian languages  
+- **Low Friction:** Removes the need to learn app interfaces  
+- **Trust:** Information delivered in a familiar tone and language feels more reliable  
+
+---
 
 ## How AwaazSetu Works
-AwaazSetu acts as an intelligent bridge:
-1. **Selection**: User chooses the service (Government or Healthcare) and their preferred language.
-2. **Interaction**: User taps the microphone to ask a question in natural language.
-3. **Intent Detection**: The backend analyzes the spoken (or typed) input to identify the specific need (e.g., "ration card" or "fever").
-4. **Knowledge Retrieval**: The system fetches the most relevant, pre-verified information from its local database.
-5. **Guidance**: The information is presented in a short, easy-to-understand, spoken-style format.
+AwaazSetu acts as an intelligent voice bridge:
+
+1. **Selection:** User chooses the service (Government or Healthcare) and preferred language  
+2. **Interaction:** User taps the microphone and asks a question naturally  
+3. **Intent Detection:** Backend analyzes the spoken (or typed) input  
+4. **Knowledge Retrieval:** Relevant, pre-verified information is fetched  
+5. **Guidance:** A short, spoken-style response is returned in Hindi or English  
+
+---
 
 ## Tech Stack
-- **Backend**: Python Flask
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3 (Inter font, Font Awesome)
-- **Database**: Firebase Firestore (with Mock Data fallback for offline/demo)
-- **Styling**: Modern CSS with CSS Variables and responsive design
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript  
+- **Backend:** Python (Flask)  
+- **Database:** Firebase Firestore (with mock-data fallback for demo/offline use)  
+- **Voice Input:** Browser Web Speech API  
+- **Hosting:** Render  
+
+---
+
+## Key Features
+- 🎤 Real-time voice recognition  
+- 🌐 Hindi and English language support  
+- 🏛️ Government scheme guidance  
+- 🏥 Basic healthcare assistance (non-diagnostic)  
+- 📱 Mobile-friendly, low-bandwidth UI  
+
+---
 
 ## How to Run Locally
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Setup Database (Optional)**:
-   - To use live Firebase data, set the `FIREBASE_SERVICE_ACCOUNT` secret with your service account JSON.
-   - If not set, the app will automatically use high-quality **Mock Data** for the demo.
-3. **Run the Application**:
-   ```bash
-   python app.py
-   ```
-4. **Access the App**: Open your browser and navigate to `http://localhost:5000`.
 
-## Future Scope
-- **IVR Integration**: Enable users to call a phone number and get information over a standard voice call.
-- **WhatsApp Voice Bot**: Integrate with WhatsApp to allow users to send voice notes and receive audio guidance.
-- **Government API Integration**: Connect directly to official portals for real-time status tracking (e.g., checking ration card status).
-- **Expanded Dialects**: Add support for more regional Indian languages and local dialects.
-- **Voice-to-Voice**: Implement Text-to-Speech (TTS) to read out the responses automatically.
+### Install Dependencies
+```bash
+pip install -r requirements.txt
