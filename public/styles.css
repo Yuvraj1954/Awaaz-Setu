@@ -188,7 +188,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    min-height: 140px;
+    height: 140px;
     justify-content: center;
 }
 
@@ -216,10 +216,13 @@ body {
     color: var(--text);
     text-align: center;
     line-height: 1.4;
-    min-height: 2.8em;
+    height: 2.8em;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .service-btn.active {
@@ -253,7 +256,7 @@ body {
     align-items: center;
     gap: 1rem;
     cursor: pointer;
-    min-height: 160px;
+    height: 160px;
     justify-content: center;
     position: relative;
 }
@@ -279,41 +282,20 @@ body {
     background: #1d4ed8;
 }
 
-.pulse-ring {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background: var(--primary);
-    border-radius: 50%;
-    z-index: 1;
-    opacity: 0.4;
-    animation: pulse 2s infinite;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.4;
-    }
-    100% {
-        transform: scale(1.8);
-        opacity: 0;
-    }
-}
 
 .mic-container p {
     font-weight: 600;
     color: var(--primary);
     text-align: center;
-    min-height: 1.5em;
+    height: 1.5em;
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 200px;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding: 0 0.5rem;
 }
 
 /* Text Input Section */
@@ -530,11 +512,11 @@ textarea:focus {
     .service-selector { gap: 0.5rem; }
     .service-btn { 
         padding: 1rem 0.5rem; 
-        min-height: 120px;
+        height: 120px;
     }
     .service-btn span {
         font-size: 0.875rem;
-        min-height: 2.6em;
+        height: 2.6em;
     }
     .logo-text p { display: none; }
 }
