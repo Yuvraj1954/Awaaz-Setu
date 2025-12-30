@@ -1,48 +1,134 @@
-# AwaazSetu - Voice Bridge to Services
+# 🎙️ AwaazSetu  
+### 🌏 *Voice Bridge to Essential Services for Bharat*
 
-## Overview
-AwaazSetu is a voice-first platform designed to empower rural users in India by providing seamless access to essential government and healthcare information. By bridging the gap between complex digital services and local languages, it ensures that technology serves those who need it most.
+🚨 **IMPORTANT:**  
+**Voice features work best in Google Chrome.**  
+Please allow microphone access when prompted.
 
-## Problem Statement
-In rural India, millions of people struggle to access government schemes and healthcare guidance due to digital literacy barriers, complex website interfaces, and language gaps. Traditional search engines and portals are often too complicated for users who are more comfortable with spoken language than typing.
+🔗 **LIVE DEMO:**  
+👉 **https://awaaz-setu-2.onrender.com/**
 
-## Why Voice-First for India?
-- **Digital Literacy**: Many users find speaking more natural than navigating complex menus or typing.
-- **Local Languages**: Voice allows for better accessibility in local dialects and languages like Hindi.
-- **Low Friction**: Eliminates the need for learning complex UI patterns.
-- **Trust**: Hearing information in a familiar language and tone builds trust in the information provided.
+---
 
-## How AwaazSetu Works
-AwaazSetu acts as an intelligent bridge:
-1. **Selection**: User chooses the service (Government or Healthcare) and their preferred language.
-2. **Interaction**: User taps the microphone to ask a question in natural language.
-3. **Intent Detection**: The backend analyzes the spoken (or typed) input to identify the specific need (e.g., "ration card" or "fever").
-4. **Knowledge Retrieval**: The system fetches the most relevant, pre-verified information from its local database.
-5. **Guidance**: The information is presented in a short, easy-to-understand, spoken-style format.
+## 🌟 Overview
 
-## Tech Stack
-- **Backend**: Python Flask
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3 (Inter font, Font Awesome)
-- **Database**: Firebase Firestore (with Mock Data fallback for offline/demo)
-- **Styling**: Modern CSS with CSS Variables and responsive design
+**AwaazSetu** is a **voice-first digital assistant** built to make **government services, healthcare guidance, and emergency information** accessible to everyone — especially **rural and non-tech users**.
 
-## How to Run Locally
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Setup Database (Optional)**:
-   - To use live Firebase data, set the `FIREBASE_SERVICE_ACCOUNT` secret with your service account JSON.
-   - If not set, the app will automatically use high-quality **Mock Data** for the demo.
-3. **Run the Application**:
-   ```bash
-   python app.py
-   ```
-4. **Access the App**: Open your browser and navigate to `http://localhost:5000`.
+Instead of navigating complex websites or typing long queries, users can simply **speak in Hindi or English** and receive **clear, spoken responses**.
 
-## Future Scope
-- **IVR Integration**: Enable users to call a phone number and get information over a standard voice call.
-- **WhatsApp Voice Bot**: Integrate with WhatsApp to allow users to send voice notes and receive audio guidance.
-- **Government API Integration**: Connect directly to official portals for real-time status tracking (e.g., checking ration card status).
-- **Expanded Dialects**: Add support for more regional Indian languages and local dialects.
-- **Voice-to-Voice**: Implement Text-to-Speech (TTS) to read out the responses automatically.
+> 🗣️ *If you can speak, you can access services.*
+
+---
+
+## ❗ Problem Statement
+
+In rural and semi-urban India, millions of people face challenges such as:
+
+- ❌ Low digital literacy  
+- ❌ English-heavy government portals  
+- ❌ Complex forms and confusing UIs  
+- ❌ Difficulty typing on smartphones  
+
+As a result, **essential schemes and healthcare guidance remain inaccessible** to the people who need them the most.
+
+---
+
+## 💡 Why Voice-First for India?
+
+- 🧠 **Natural Interaction** – Speaking is easier than typing or navigating menus  
+- 🌐 **Language Inclusion** – Supports Hindi and English  
+- ⚡ **Low Friction** – No forms, no learning curve  
+- 🤝 **Trust & Familiarity** – Hearing responses in one’s own language builds confidence  
+- 📱 **Mobile-Friendly** – Designed for low-bandwidth environments  
+
+---
+
+## 🧭 How AwaazSetu Works
+
+1️⃣ **User Speaks**  
+Tap the microphone and ask a question in Hindi or English.
+
+2️⃣ **Intent Detection**  
+The backend analyzes the spoken or typed query using keyword-based intent detection.
+
+3️⃣ **Knowledge Retrieval**  
+A curated, multilingual **Firebase database** is queried for verified responses.
+
+4️⃣ **Voice Response**  
+The answer is shown on screen **and read aloud** using browser-based text-to-speech.
+
+---
+
+## 🎤 What Can You Say? (Voice Commands)
+
+### 👋 Greetings
+- “Hi”
+- “Hello”
+- “Namaste”
+- “नमस्ते”
+- “कैसे हो”
+
+---
+
+### 🏛️ Government Services
+- “What is Ayushman Bharat?”
+- “How to apply for ration card?”
+- “राशन कार्ड कैसे बनवाएं?”
+- “पेंशन की जानकारी”
+- “Aadhaar update kaise kare”
+
+---
+
+### 🏥 Healthcare Guidance
+- “I have fever”
+- “Cough and cold”
+- “पेट दर्द”
+- “Vaccination information”
+- “गर्भावस्था से जुड़ी जानकारी”
+
+---
+
+### 🚨 Emergency & Safety
+- “Emergency number”
+- “Police number”
+- “Ambulance number”
+- “इमरजेंसी नंबर बताओ”
+- “पुलिस का नंबर क्या है”
+
+📞 Provides verified Indian emergency numbers like **112, 108, 101, 1098**.
+
+---
+
+### ℹ️ Help & Guidance
+- “Help”
+- “What can you do?”
+- “यह कैसे काम करता है?”
+- “मदद”
+
+---
+
+## 🛠️ Tech Stack
+
+### 🔧 Backend
+- **Python Flask**
+- Keyword-based intent detection
+- REST API (`/api/query`)
+
+### 🎨 Frontend
+- HTML5, CSS3, Vanilla JavaScript
+- Voice Input: Web Speech API
+- Audio Output: SpeechSynthesis API
+- Mobile-first, low-distraction UI
+
+### 🗄️ Database
+- **Firebase Firestore**
+- Curated multilingual responses
+- Offline / fallback support for demos
+
+---
+
+## 🚀 How to Run Locally
+
+### 1️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
