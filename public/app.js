@@ -1,9 +1,15 @@
+/*********************************
+ GLOBAL STATE
+**********************************/
 let currentLanguage = 'en';
-let currentService = 'auto'; // Auto-detect service from intent
+let currentService = 'auto';
 let recognition;
 let isListening = false;
-let currentUtterance = null; // Track current speech for cancellation
+let currentUtterance = null;
 
+/*********************************
+ TRANSLATIONS
+**********************************/
 const translations = {
     en: {
         title: 'AwaazSetu',
@@ -12,11 +18,6 @@ const translations = {
         micLabel: 'Tap & Speak',
         listening: 'Listening...',
         tryAsking: 'Try asking:',
-        prompt1: 'नमस्ते',
-        prompt2: 'Emergency number',
-        prompt3: 'I have fever',
-        prompt4: 'राशन कार्ड कैसे बनवाएं?',
-        prompt5: 'What is Ayushman Bharat?',
         inputLabel: 'How can we help you?',
         inputPlaceholder: 'Type your question here...',
         submit: 'Ask Question',
@@ -32,11 +33,6 @@ const translations = {
         micLabel: 'बोलने के लिए टैप करें',
         listening: 'सुन रहा हूँ...',
         tryAsking: 'पूछने का प्रयास करें:',
-        prompt1: 'नमस्ते',
-        prompt2: 'आपातकाल नंबर',
-        prompt3: 'मुझे बुखार है',
-        prompt4: 'राशन कार्ड कैसे बनवाएं?',
-        prompt5: 'आयुष्मान भारत क्या है?',
         inputLabel: 'हम आपकी कैसे मदद कर सकते हैं?',
         inputPlaceholder: 'अपना सवाल यहाँ लिखें...',
         submit: 'सवाल पूछें',
@@ -47,163 +43,65 @@ const translations = {
     }
 };
 
-// Initialize Speech Recognition
+/*********************************
+ SPEECH RECOGNITION
+**********************************/
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
     recognition.continuous = false;
-    recognition.interimResults = true; // Enabled interim results for better responsiveness
+    recognition.interimResults = false;
 
     recognition.onstart = () => {
         isListening = true;
         document.querySelector('.mic-circle').style.background = '#ef4444';
         document.getElementById('mic-label').textContent = translations[currentLanguage].listening;
-        console.log('Speech recognition started');
     };
 
     recognition.onresult = (event) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                finalTranscript += event.results[i][0].transcript;
-            } else {
-                interimTranscript += event.results[i][0].transcript;
-            }
-        }
-        
-        const transcript = finalTranscript || interimTranscript;
-        if (transcript) {
-            document.getElementById('user-input').value = transcript;
-            // Force text section visible so user sees the text appearing
-            document.getElementById('text-input-section').style.display = 'block';
-            document.getElementById('response-section').style.display = 'none';
-        }
+        const text = event.results[0][0].transcript;
+        document.getElementById('user-input').value = text;
     };
 
-    recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        
-        // Handle specific errors
-        if (event.error === 'network') {
-            console.warn('Network error during speech recognition. This can happen in some browser environments or with poor connectivity.');
-            // Don't alert immediately as it might be transient, just stop UI
-        } else if (event.error === 'not-allowed') {
-            alert(currentLanguage === 'en' 
-                ? 'Microphone access denied. Please enable it in browser settings.' 
-                : 'माइक्रोफोन एक्सेस अस्वीकार कर दिया गया। कृपया ब्राउज़र सेटिंग्स में इसे सक्षम करें।');
-        }
-        
+    recognition.onend = () => {
         stopListening();
+        const text = document.getElementById('user-input').value.trim();
+        if (text) submitQuery();
     };
 
-recognition.onend = () => {
-    console.log('Speech recognition ended');
-    stopListening();
-
-    const text = document.getElementById('user-input').value.trim();
-
-    // ✅ Auto-submit only if user actually spoke something
-    if (text.length > 0) {
-        submitQuery();
-    }
-};
-
+    recognition.onerror = () => stopListening();
 }
 
 function stopListening() {
     isListening = false;
     document.querySelector('.mic-circle').style.background = 'var(--primary)';
-    document.getElementById('mic-label').textContent = translations[currentLanguage].micLabel;
+    document.getElementById('mic-label').textContent =
+        translations[currentLanguage].micLabel;
 }
 
-// Text-to-Speech function using Web Speech API
+/*********************************
+ TEXT TO SPEECH (WEB ONLY)
+**********************************/
 function speakText(text, language) {
-    // Cancel any ongoing speech
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-    }
-    
-    // Check if browser supports Speech Synthesis
-    if (!('speechSynthesis' in window)) {
-        console.warn('Speech synthesis not supported in this browser');
-        return;
-    }
-    
-    // Create new utterance
+    if (!('speechSynthesis' in window)) return;
+
+    speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Set language based on current selection
     utterance.lang = language === 'hi' ? 'hi-IN' : 'en-IN';
-    
-    // Set faster speech rate for better user experience
-    utterance.rate = 1.2;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    
-    // Store current utterance for cancellation
-    currentUtterance = utterance;
-    
-    // Handle speech events
-    utterance.onend = () => {
-        currentUtterance = null;
-        // Update speaker button state if it exists
-        const speakerBtn = document.getElementById('speaker-btn');
-        if (speakerBtn) {
-            speakerBtn.classList.remove('speaking');
-        }
-    };
-    
-    utterance.onerror = (event) => {
-        console.error('Speech synthesis error:', event.error);
-        currentUtterance = null;
-        const speakerBtn = document.getElementById('speaker-btn');
-        if (speakerBtn) {
-            speakerBtn.classList.remove('speaking');
-        }
-    };
-    
-    // Start speaking
-    window.speechSynthesis.speak(utterance);
-    
-    // Update speaker button state if it exists
-    const speakerBtn = document.getElementById('speaker-btn');
-    if (speakerBtn) {
-        speakerBtn.classList.add('speaking');
-    }
+    utterance.rate = 1.1;
+    speechSynthesis.speak(utterance);
 }
 
-// Function to stop current speech
-function stopSpeech() {
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-    }
-    currentUtterance = null;
-    const speakerBtn = document.getElementById('speaker-btn');
-    if (speakerBtn) {
-        speakerBtn.classList.remove('speaking');
-    }
-}
-
+/*********************************
+ LANGUAGE UPDATE
+**********************************/
 function updateLanguage() {
     const t = translations[currentLanguage];
     document.getElementById('app-title').textContent = t.title;
     document.getElementById('app-subtitle').textContent = t.subtitle;
-    if (document.getElementById('app-tagline')) {
-        document.getElementById('app-tagline').textContent = t.tagline;
-    }
+    document.getElementById('app-tagline').textContent = t.tagline;
     document.getElementById('mic-label').textContent = t.micLabel;
-    if (document.getElementById('try-asking-label')) {
-        document.getElementById('try-asking-label').textContent = t.tryAsking;
-    }
-    if (document.getElementById('prompt-1')) {
-        document.getElementById('prompt-1').textContent = t.prompt1;
-        document.getElementById('prompt-2').textContent = t.prompt2;
-        document.getElementById('prompt-3').textContent = t.prompt3;
-        document.getElementById('prompt-4').textContent = t.prompt4;
-        document.getElementById('prompt-5').textContent = t.prompt5;
-    }
+    document.getElementById('try-asking-label').textContent = t.tryAsking;
     document.getElementById('input-label').textContent = t.inputLabel;
     document.getElementById('user-input').placeholder = t.inputPlaceholder;
     document.getElementById('submit-text').textContent = t.submit;
@@ -211,153 +109,103 @@ function updateLanguage() {
     document.getElementById('response-title').textContent = t.responseTitle;
     document.getElementById('new-query-text').textContent = t.newQuery;
     document.getElementById('loading-text').textContent = t.loading;
-    document.documentElement.lang = currentLanguage;
-    
+
     if (recognition) {
         recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
     }
 }
 
+/*********************************
+ LANGUAGE BUTTONS
+**********************************/
 document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', () => {
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentLanguage = this.dataset.lang;
+        btn.classList.add('active');
+        currentLanguage = btn.dataset.lang;
         updateLanguage();
     });
 });
 
-// Service selection removed - service is now auto-detected from intent
-
-document.getElementById('mic-button').addEventListener('click', function() {
-    if (recognition) {
-        if (isListening) {
-            recognition.stop();
-        } else {
-            // Force language setup right before starting
-            recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
-            try {
-                recognition.start();
-            } catch (err) {
-                console.error('Error starting recognition:', err);
-                // Only if starting fails, we might show text input as a LAST resort
-                // but let's try to just log for now to satisfy "ONLY start speech"
-            }
-        }
-    } else {
-        // Only if recognition is totally unavailable (unsupported browser)
-        alert(currentLanguage === 'en' 
-            ? 'Your browser does not support voice recognition. Please use a modern browser like Chrome.' 
-            : 'आपका ब्राउज़र वॉयस रिकग्निशन को सपोर्ट नहीं करता है। कृपया क्रोम जैसा आधुनिक ब्राउज़र उपयोग करें।');
-    }
+/*********************************
+ MIC BUTTON
+**********************************/
+document.getElementById('mic-button').addEventListener('click', () => {
+    if (!recognition) return alert('Please use Chrome for voice input.');
+    recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
+    isListening ? recognition.stop() : recognition.start();
 });
 
-document.getElementById('cancel-btn').addEventListener('click', function() {
-    // Stop any ongoing speech when canceling
-    stopSpeech();
-    document.getElementById('text-input-section').style.display = 'none';
-    document.getElementById('mic-button').style.display = 'flex';
-    document.getElementById('user-input').value = '';
-});
-
-document.getElementById('submit-btn').addEventListener('click', function() {
-    submitQuery();
-});
-
-document.getElementById('user-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        submitQuery();
-    }
-});
-
-document.getElementById('new-query-btn').addEventListener('click', function() {
-    // Stop any ongoing speech when starting new query
-    stopSpeech();
-    document.getElementById('response-section').style.display = 'none';
-    document.getElementById('mic-button').style.display = 'flex';
-    document.getElementById('text-input-section').style.display = 'none';
-    document.getElementById('user-input').value = '';
-});
-
-// Speaker button event listener
-const speakerBtn = document.getElementById('speaker-btn');
-if (speakerBtn) {
-    speakerBtn.addEventListener('click', function() {
-        const responseText = document.getElementById('response-text').textContent;
-        if (responseText) {
-            // If already speaking, stop it; otherwise, speak
-            if (window.speechSynthesis.speaking) {
-                stopSpeech();
-            } else {
-                speakText(responseText, currentLanguage);
-            }
-        }
-    });
-}
-
+/*********************************
+ SUBMIT QUERY
+**********************************/
 async function submitQuery() {
     const text = document.getElementById('user-input').value.trim();
+    if (!text) return;
 
-    if (!text) {
-        alert(currentLanguage === 'en' ? 'Please type or speak your question' : 'कृपया अपना सवाल बोलें या लिखें');
-        return;
-    }
-
-    document.getElementById('text-input-section').style.display = 'none';
     document.getElementById('loading').style.display = 'flex';
 
     try {
-        const response = await fetch('/api/query', {
+        const res = await fetch('/api/query', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                text: text,
+                text,
                 service: currentService,
                 language: currentLanguage
             })
         });
 
-        const data = await response.json();
-
+        const data = await res.json();
         document.getElementById('loading').style.display = 'none';
         document.getElementById('response-text').textContent = data.response;
         document.getElementById('response-section').style.display = 'block';
-        
-        // Automatically speak the response
         speakText(data.response, currentLanguage);
 
-    } catch (error) {
+    } catch {
         document.getElementById('loading').style.display = 'none';
-        alert(currentLanguage === 'en'
-            ? 'Error connecting to server. Please try again.'
-            : 'सर्वर से कनेक्ट करने में त्रुटि। कृपया पुनः प्रयास करें।');
-        document.getElementById('mic-button').style.display = 'flex';
+        alert('Server error. Please try again.');
     }
 }
-// =========================
-// CLICKABLE "TRY ASKING" PROMPTS
-// =========================
 
-document.querySelectorAll('.example-prompt').forEach(prompt => {
-    prompt.addEventListener('click', () => {
-        const text = prompt.textContent.trim();
+/*********************************
+ RANDOM + CLICKABLE PROMPTS
+**********************************/
+const promptPool = [
+    "नमस्ते",
+    "Emergency number",
+    "I have fever",
+    "राशन कार्ड कैसे बनवाएं?",
+    "What is Ayushman Bharat?",
+    "Ambulance number",
+    "Hospital near me",
+    "Vaccination schedule",
+    "Old age pension",
+    "सरकारी योजना बताइए"
+];
 
-        // Put text into input box
-        const input = document.getElementById('user-input');
-        input.value = text;
+function loadRandomPrompts() {
+    const shuffled = [...promptPool].sort(() => 0.5 - Math.random());
+    document.querySelectorAll('.prompt-item').forEach((el, i) => {
+        el.textContent = shuffled[i];
+        el.onclick = () => {
+            document.getElementById('user-input').value = el.textContent;
+            currentLanguage = /[\u0900-\u097F]/.test(el.textContent) ? 'hi' : 'en';
+            updateLanguage();
 
-        // Auto-detect language
-        if (/[\u0900-\u097F]/.test(text)) {
-            currentLanguage = 'hi';
-        } else {
-            currentLanguage = 'en';
-        }
-        updateLanguage();
+            const mic = document.querySelector('.mic-circle');
+            mic.classList.add('mic-click-animate');
+            setTimeout(() => mic.classList.remove('mic-click-animate'), 400);
 
-        // Directly submit the query
-        submitQuery();
+            submitQuery();
+        };
     });
+}
+
+/*********************************
+ INIT
+**********************************/
+window.addEventListener('load', () => {
+    updateLanguage();
+    loadRandomPrompts();
 });
