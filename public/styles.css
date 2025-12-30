@@ -586,3 +586,11 @@ textarea:focus {
         font-size: 0.75rem;
     }
 }
+.example-prompt {
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.example-prompt:hover {
+    transform: translateY(-2px);
+}
