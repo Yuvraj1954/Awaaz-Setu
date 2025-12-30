@@ -31,34 +31,21 @@ You can either **speak** or **click** these prompts.
 - Call ambulance  
 - Hospital near me  
 - Government hospital  
-- Nearest hospital  
 - Women helpline  
 - Call women helpline  
-- Child helpline  
-- Call child helpline  
 
 ### 🔹 Women & Pregnancy
 - Pregnancy help  
 - Pregnancy care  
-- Pregnant women help  
 - Government pregnancy scheme  
 - Free pregnancy checkup  
-
-### 🔹 Child & Vaccination
-- Child health  
-- Child care  
-- Child vaccination  
-- Baby vaccination  
-- Vaccination schedule  
-- Free child vaccination  
 
 ### 🔹 Health Issues
 - I have fever  
 - Fever treatment  
 - Cold and cough  
 - Headache  
-- Stomach pain  
-- Health emergency  
+- Stomach pain   
 - Free treatment scheme  
 
 ### 🔹 Government Schemes
@@ -66,9 +53,7 @@ You can either **speak** or **click** these prompts.
 - What is Ayushman Bharat  
 - Free treatment under Ayushman  
 - Health card  
-- PM Awas Yojana  
-- Housing scheme  
-- Government housing help  
+- PM Awas Yojana    
 
 ### 🔹 Documents & Certificates
 - Ration card  
