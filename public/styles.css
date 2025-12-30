@@ -640,3 +640,18 @@ textarea:focus {
     background: #fee2e2;
     transform: scale(1.03);
 }
+/* ===== FINAL FIX: REMOVE PAGE SCROLL ===== */
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.app-wrapper {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    max-height: calc(100vh - 120px); /* header space */
+    overflow-y: auto;
+}
