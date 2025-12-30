@@ -67,6 +67,9 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const transcript = finalTranscript || interimTranscript;
         if (transcript) {
             document.getElementById('user-input').value = transcript;
+            // Force text section visible so user sees the text appearing
+            document.getElementById('text-input-section').style.display = 'block';
+            document.getElementById('response-section').style.display = 'none';
         }
     };
 
@@ -142,17 +145,21 @@ document.getElementById('mic-button').addEventListener('click', function() {
         if (isListening) {
             recognition.stop();
         } else {
-            // Hide response if any and focus input area visually (but don't hide mic)
-            document.getElementById('response-section').style.display = 'none';
-            document.getElementById('text-input-section').style.display = 'block';
-            
+            // Force language setup right before starting
             recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
-            recognition.start();
+            try {
+                recognition.start();
+            } catch (err) {
+                console.error('Error starting recognition:', err);
+                // Only if starting fails, we might show text input as a LAST resort
+                // but let's try to just log for now to satisfy "ONLY start speech"
+            }
         }
     } else {
-        // Fallback for browsers without speech support
-        document.getElementById('mic-button').style.display = 'none';
-        document.getElementById('text-input-section').style.display = 'block';
+        // Only if recognition is totally unavailable (unsupported browser)
+        alert(currentLanguage === 'en' 
+            ? 'Your browser does not support voice recognition. Please use a modern browser like Chrome.' 
+            : 'आपका ब्राउज़र वॉयस रिकग्निशन को सपोर्ट नहीं करता है। कृपया क्रोम जैसा आधुनिक ब्राउज़र उपयोग करें।');
     }
 });
 
