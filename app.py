@@ -274,6 +274,32 @@ def get_response(service, language, intent):
     
     # Use service-specific fallback
     return FALLBACK_RESPONSES.get(language, FALLBACK_RESPONSES["en"]).get(service, FALLBACK_RESPONSES["en"]["general"])
+    
+    # ---------------- EXTRA STATIC RESPONSES (PROMPT SAFE) ----------------
+
+STATIC_PROMPT_RESPONSES = {
+    "emergency_numbers": {
+        "en": "Emergency numbers in India: Police 112, Ambulance 108, Fire 101, Women 181, Child 1098.",
+        "hi": "भारत के आपातकालीन नंबर: पुलिस 112, एम्बुलेंस 108, फायर 101, महिला 181, चाइल्ड 1098।"
+    },
+    "hospital_near_me": {
+        "en": "You can visit the nearest government hospital or call 108 for ambulance assistance.",
+        "hi": "आप नजदीकी सरकारी अस्पताल जा सकते हैं या एम्बुलेंस के लिए 108 पर कॉल करें।"
+    },
+    "old_age_pension": {
+        "en": "Old age pension is provided under NSAP. Apply via state portal or nearest CSC.",
+        "hi": "वृद्धावस्था पेंशन NSAP के अंतर्गत मिलती है। आवेदन राज्य पोर्टल या CSC से करें।"
+    },
+    "vaccination": {
+        "en": "Vaccination details are available on CoWIN portal or nearest PHC.",
+        "hi": "टीकाकरण की जानकारी CoWIN पोर्टल या नजदीकी PHC से लें।"
+    },
+    "government_scheme": {
+        "en": "Popular schemes include Ayushman Bharat, PM Awas Yojana, and Pension schemes.",
+        "hi": "लोकप्रिय योजनाएँ: आयुष्मान भारत, पीएम आवास योजना और पेंशन योजनाएँ।"
+    }
+}
+
 
 # ---------------- API ROUTE ----------------
 
