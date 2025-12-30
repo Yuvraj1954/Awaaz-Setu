@@ -3,6 +3,10 @@ import json
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
+# Get absolute path to public folder for Vercel compatibility
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PUBLIC_DIR = os.path.join(BASE_DIR, "public")
+
 app = Flask(__name__, static_folder="public")
 CORS(app)
 
@@ -68,11 +72,15 @@ def process_query():
 
 @app.route("/")
 def index():
-    return send_from_directory("public", "index.html")
+    return send_from_directory(PUBLIC_DIR, "index.html")
 
 @app.route("/<path:path>")
 def static_files(path):
-    return send_from_directory("public", path)
+    # Only serve files that exist in public directory
+    if os.path.exists(os.path.join(PUBLIC_DIR, path)):
+        return send_from_directory(PUBLIC_DIR, path)
+    # If file doesn't exist, serve index.html for SPA routing
+    return send_from_directory(PUBLIC_DIR, "index.html")
 
 # ⚠️ IMPORTANT: DO NOT USE app.run() ON VERCEL
 # The app instance is automatically detected by Vercel's Python runtime
