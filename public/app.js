@@ -201,6 +201,27 @@ function loadRandomPrompts() {
         };
     });
 }
+/*********************************
+ ASK ANOTHER QUESTION BUTTON
+**********************************/
+document.getElementById('new-query-btn').addEventListener('click', () => {
+    // Stop any ongoing speech
+    if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+    }
+
+    // Clear input
+    document.getElementById('user-input').value = '';
+
+    // Hide response
+    document.getElementById('response-section').style.display = 'none';
+
+    // Show mic again
+    document.getElementById('mic-button').style.display = 'flex';
+
+    // Hide text input section (if visible)
+    document.getElementById('text-input-section').style.display = 'none';
+});
 
 /*********************************
  INIT
