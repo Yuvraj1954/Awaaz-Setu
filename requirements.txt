@@ -3,3 +3,5 @@ flask-cors==4.0.0
 Flask==3.0.0
 flask-cors==4.0.0
 gunicorn
+psycopg2-binary
+sqlalchemy
