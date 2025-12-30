@@ -211,20 +211,53 @@ SMART_RESPONSES = {
 
 def detect_intent(text, service, language):
     t = text.lower()
-    if any(x in t for x in ["hi", "hello", "नमस्ते"]): return "greeting"
-    if "emergency" in t or "112" in t or "आपात" in t: return "emergency_numbers"
-    if "ration" in t or "राशन" in t: return "ration_card"
-    if "ayushman" in t or "आयुष्मान" in t: return "ayushman_bharat"
-    if "pension" in t or "पेंशन" in t: return "pension"
-    if "aadhar" in t or "आधार" in t: return "aadhar"
-    if "voter" in t or "मतदाता" in t: return "voter_id"
-    if "house" in t or "आवास" in t: return "housing"
-    if "income" in t or "आय" in t: return "income_certificate"
-    if "birth" in t or "जन्म" in t: return "birth_certificate"
-    if "fever" in t or "बुखार" in t: return "fever"
-    if "pregnancy" in t or "गर्भ" in t: return "pregnancy"
-    if "vaccine" in t or "टीका" in t: return "vaccination"
-    if "child" in t or "बच्चा" in t: return "child_health"
+
+    if any(x in t for x in ["hi", "hello", "नमस्ते"]):
+        return "greeting"
+
+    if "emergency" in t or "112" in t or "आपात" in t:
+        return "emergency_numbers"
+
+    # ✅ CHILD VACCINATION (FIX)
+    if ("child" in t or "बच्चा" in t) and ("vaccine" in t or "vaccination" in t or "टीका" in t):
+        return "child_vaccination"
+
+    if "ration" in t or "राशन" in t:
+        return "ration_card"
+
+    if "ayushman" in t or "आयुष्मान" in t:
+        return "ayushman_bharat"
+
+    if "pension" in t or "पेंशन" in t:
+        return "pension"
+
+    if "aadhar" in t or "आधार" in t:
+        return "aadhar"
+
+    if "voter" in t or "मतदाता" in t:
+        return "voter_id"
+
+    if "income" in t or "आय" in t:
+        return "income_certificate"
+
+    if "birth" in t or "जन्म" in t:
+        return "birth_certificate"
+
+    if "house" in t or "आवास" in t:
+        return "housing"
+
+    if "fever" in t or "बुखार" in t:
+        return "fever"
+
+    if "pregnancy" in t or "गर्भ" in t:
+        return "pregnancy"
+
+    if "vaccine" in t or "टीका" in t:
+        return "vaccination"
+
+    if "child" in t or "बच्चा" in t:
+        return "child_health"
+
     return "default"
 
 # ---------------- API ----------------
