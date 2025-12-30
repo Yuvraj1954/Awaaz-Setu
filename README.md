@@ -16,16 +16,7 @@ This application is a **rule-based voice assistant prototype** built for reliabi
 Only the commands listed below are officially supported to ensure **accurate, safe, and consistent responses** during usage and demonstrations.
 
 ---
-## 💡 Why Limited Commands?
 
-AwaazSetu intentionally supports a **curated set of essential public service queries** instead of open-ended AI responses.  
-This approach ensures:
-- High accuracy for healthcare and government information  
-- Reliable performance on low internet bandwidth  
-- No hallucinated or unsafe answers  
-- Better accessibility for rural and first-time users  
-
----
 ## 🎙️ Supported Voice & Text Questions
 
 AwaazSetu currently supports the following **exact questions and voice commands**.  
@@ -109,7 +100,16 @@ You can either **speak** or **click** these prompts.
 > If a question is not recognized, the app safely guides the user to supported services.
 
 ---
+## 💡 Why Limited Commands?
 
+AwaazSetu intentionally supports a **curated set of essential public service queries** instead of open-ended AI responses.  
+This approach ensures:
+- High accuracy for healthcare and government information  
+- Reliable performance on low internet bandwidth  
+- No hallucinated or unsafe answers  
+- Better accessibility for rural and first-time users  
+
+---
 ## 🌟 Overview
 
 **AwaazSetu** is a **voice-first digital assistant** built to make **government services, healthcare guidance, and emergency information** accessible to everyone — especially **rural and non-tech users**.
