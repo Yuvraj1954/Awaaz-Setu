@@ -15,6 +15,18 @@
 
 ---
 
+## 📱 Beyond the Hackathon: Sarthi (Mobile Version)
+> **Note to Judges:** While the web app was the core project, I independently developed a native Android experience to bridge the accessibility gap even further.
+
+[![Download APK](https://img.shields.io/badge/Native_App-Sarthi_APK-FF2D55?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Yuvraj1954/Sarthi)
+
+**Sarthi** is the native Android counterpart to AwaazSetu, optimized for low-end devices and offline-first interactions. It represents the "Next Step" in my vision for digital inclusion.
+
+* **Repository:** [github.com/Yuvraj1954/Sarthi](https://github.com/Yuvraj1954/Sarthi)
+* **Key Feature:** Smoother Voice Processing & Mobile-Native Performance.
+
+---
+
 ## 🖥️ Platform in Action
 ![AwaazSetu Feature Image](screenshots/web_screen1.png)
 
@@ -69,7 +81,7 @@ AwaazSetu is designed to be the "Digital Entry Point" for every household in Bha
 - [x] **Phase 2:** Flask-Firebase Real-time Knowledge Sync.
 - [x] **Phase 3:** Mobile-first Web UI for 2G/3G network stability.
 - [ ] **Phase 4:** **WhatsApp Integration** — Deploying the AwaazSetu engine as a Voice-Bot for 500M+ WhatsApp users.
-- [ ] **Phase 5:** **PWA Transformation** — Adding Service Workers to allow web-based offline caching and "Install to Home Screen" capability.
+- [x] **Phase 5: Native Android Expansion (Sarthi)** — **[COMPLETED]** Independently developed a standalone APK for a more robust mobile experience. [View Sarthi Repo 🔗](https://github.com/Yuvraj1954/Sarthi)
 - [ ] **Phase 6:** **Multi-Dialect Expansion** — Partnering with local NGOs to map Bhojpuri, Marathi, and Tamil medical terminology.
 
 ---
