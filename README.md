@@ -1,5 +1,5 @@
 # 🎙️ AwaazSetu (आवाज़सेतु)
-### *Bridging the Digital Divide: A Zero-Hallucination Voice Gateway for Bharat*
+### *Empowering Bharat: The Voice-First Gateway to Essential Services*
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=render)](https://awaaz-setu-2.onrender.com/)
 [![Platform](https://img.shields.io/badge/Platform-Web-blue?style=for-the-badge&logo=googlechrome)](https://awaaz-setu-2.onrender.com/)
@@ -9,19 +9,16 @@
 ---
 
 ## 📺 Mission Overview
-**AwaazSetu** is a voice-first web platform engineered for the 300M+ Indians who face literacy and language barriers. While the internet is full of information, it is often inaccessible to rural populations. AwaazSetu turns complex government portals into a **simple conversation.**
+**AwaazSetu** is a voice-first web platform engineered for the 300M+ Indians who face literacy and language barriers. While the internet is full of information, it is often inaccessible to rural populations. AwaazSetu turns complex government portals into a **simple, spoken conversation.**
 
 ### [🔗 Experience the Live Web App](https://awaaz-setu-2.onrender.com/)
 
 ---
 
-## 📸 Interface Preview
-| 🎤 Voice-First UI | 📚 Bilingual Knowledge | 🏥 Instant Assistance |
-| :---: | :---: | :---: |
-| <img src="screenshots/web_screen1.png" width="400" alt="Home Screen" /> | <img src="screenshots/web_screen2.png" width="400" alt="Bilingual Search" /> | <img src="screenshots/web_screen3.png" width="400" alt="Results" /> |
-| *One-tap activation* | *Hindi & English Support* | *Verified Information* |
+## 🖥️ Platform in Action
+![AwaazSetu Feature Image](screenshots/web_screen1.png)
 
-> **Note to Judges:** To display these images, upload your screenshots to a folder named `/screenshots` in this repository as `web_screen1.png`, `web_screen2.png`, etc.
+> **Note to Judges:** To display this image, upload a high-resolution screenshot of your web app to a folder named `/screenshots` and name it `main_showcase.png`.
 
 ---
 
@@ -31,10 +28,10 @@
 In critical sectors like **Healthcare** and **Government Schemes**, accuracy is non-negotiable. Unlike standard LLMs that might "hallucinate" fake rules, AwaazSetu uses a **Keyword-Based Intent System**. This ensures users get 100% verified, life-saving data every time.
 
 ### 🗣️ 2. The "Hinglish" Edge
-Users in Bharat don't just speak Hindi or English—they speak a mix. Our NLP logic is optimized to recognize "Hinglish" commands, making the tech feel invisible and natural.
+Users in Bharat don't just speak Hindi or English—they speak a mix. Our NLP logic is optimized to recognize "Hinglish" commands, making the tech feel invisible and natural for the non-tech-savvy.
 
 ### 🌐 3. High Accessibility
-Built with **Python Flask** and **Web Speech APIs**, it requires zero installation. It’s designed to be lightweight, running smoothly even on low-end smartphones used in rural areas.
+Built with **Python Flask** and **Web Speech APIs**, it requires zero installation. It’s designed to be ultra-lightweight, running smoothly even on budget smartphones and 2G/3G networks.
 
 ---
 
