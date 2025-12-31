@@ -34,13 +34,13 @@
 
 ## 🚀 Why AwaazSetu Wins
 
-### 🛡️ 1. Zero-Hallucination Architecture
+### 🛡️ Zero-Hallucination Architecture
 In critical sectors like **Healthcare** and **Government Schemes**, accuracy is non-negotiable. Unlike standard LLMs that might "hallucinate" fake rules, AwaazSetu uses a **Keyword-Based Intent System**. This ensures users get 100% verified, life-saving data every time.
 
-### 🗣️ 2. The "Hinglish" Edge
+### 🗣️ The "Hinglish" Edge
 Users in Bharat don't just speak Hindi or English—they speak a mix. Our NLP logic is optimized to recognize "Hinglish" commands, making the tech feel invisible and natural for the non-tech-savvy.
 
-### 🌐 3. High Accessibility
+### 🌐 High Accessibility
 Built with **Python Flask** and **Web Speech APIs**, it requires zero installation. It’s designed to be ultra-lightweight, running smoothly even on budget smartphones and 2G/3G networks.
 
 ---
