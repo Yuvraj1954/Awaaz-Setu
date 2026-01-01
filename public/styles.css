@@ -2,8 +2,10 @@
     --primary: #4f46e5;
     --bg-dark: #020617;
     --glass: rgba(255, 255, 255, 0.03);
+    --glass-heavy: rgba(255, 255, 255, 0.08);
     --border: rgba(255, 255, 255, 0.1);
     --text-main: #f8fafc;
+    --gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
 }
 
 body {
@@ -15,31 +17,76 @@ body {
     overflow: hidden;
 }
 
-.app-layout {
-    display: flex;
-    height: 100vh;
-}
+.app-layout { display: flex; height: 100vh; }
 
-/* Sidebar - Wide on Desktop */
+/* 1. Sidebar Buttons Fix */
 .sidebar {
     width: 260px;
     background: rgba(0, 0, 0, 0.3);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    padding: 2rem 1.25rem;
+    padding: 1.5rem;
     backdrop-filter: blur(20px);
 }
 
-.main-content {
-    flex: 1;
+.nav-btn {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    position: relative;
-    padding: 2rem;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+    font-weight: 600;
 }
 
-/* Centering the UI on Desktop */
+.nav-btn i { font-size: 1.2rem; }
+
+.nav-btn.active {
+    background: var(--glass-heavy);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+}
+
+.nav-btn:hover { background: var(--glass-heavy); color: white; }
+
+/* 2. Modern Centered Branding */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+}
+
+.brand-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.glow-text {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+    letter-spacing: -1px;
+}
+
+/* 3. Interaction Zone Styling */
+.main-content { flex: 1; display: flex; flex-direction: column; position: relative; }
+
 .interaction-zone {
     flex: 1;
     display: flex;
@@ -56,57 +103,20 @@ body {
     padding: 3rem;
     text-align: center;
     backdrop-filter: blur(40px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 
-/* Mic UI Styling */
-.mic-portal {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 2rem;
-    cursor: pointer;
-}
-
-.inner-circle {
-    width: 120px;
-    height: 120px;
-    background: var(--primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    margin: 40px auto;
-    box-shadow: 0 0 50px rgba(79, 70, 229, 0.5);
-    transition: 0.4s;
-}
-
-/* Button Fixes (No longer unstyled) */
-.stop-trigger {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    padding: 12px 28px;
-    border-radius: 100px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.stop-trigger:hover {
-    background: #ef4444;
-    color: white;
-}
-
+/* Button & Language Pill Styling */
 .lang-btn {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass);
     border: 1px solid var(--border);
     color: #94a3b8;
-    padding: 8px 20px;
+    padding: 8px 18px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
     margin-left: 8px;
+    transition: 0.2s;
 }
 
 .lang-btn.active {
@@ -115,12 +125,24 @@ body {
     border-color: var(--primary);
 }
 
-/* Mobile Adjustments */
-@media (max-width: 1024px) {
-    .sidebar { width: 80px; }
-    .interaction-card { padding: 2rem; max-width: 90%; }
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    margin-top: 8px;
 }
 
-@media (max-width: 768px) {
-    .sidebar { display: none; }
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
 }
+
+@keyframes blink { 50% { opacity: 0.4; } }
