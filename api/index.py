@@ -11,7 +11,7 @@ CORS(app)
 # MongoDB Connection
 MONGO_URI = os.environ.get("MONGO_URI")
 if not MONGO_URI:
-    # WARNING: Use environment variables in production!
+    # Please secure this in production
     MONGO_URI = "mongodb+srv://yuvrajk863888_db_user:aMnHBizntIPta5VX@cluster0.x4euc3w.mongodb.net/awaaz_setu_db?retryWrites=true&w=majority&appName=Cluster0"
 
 try:
@@ -88,7 +88,7 @@ def handle_query():
 @app.route("/api/history", methods=["GET"])
 def get_history():
     try:
-        # FIXED: Removed .limit(5). Now fetches ALL logs so pagination works.
+        # Fetches ALL logs (pagination handled by JS)
         history = list(logs_collection.find().sort("timestamp", -1))
         
         for item in history:
