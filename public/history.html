@@ -15,17 +15,15 @@
         .page-btn { background: var(--glass); border: 1px solid var(--border); color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .page-btn:hover:not(:disabled) { background: var(--primary); }
-        .sidebar-center-nav { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
-        .clear-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; width: 85%; }
     </style>
 </head>
 <body>
     <div class="app-layout">
         <aside class="sidebar">
             <div class="side-logo-container"><i class="fas fa-satellite-dish"></i></div>
-            <div class="sidebar-center-nav">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 <button class="nav-btn" style="width: 85%; justify-content: center;" onclick="window.location.href='index.html'"><i class="fas fa-home"></i> <span>Back Home</span></button>
-                <button class="clear-btn" onclick="clearLogs()"><i class="fas fa-trash"></i> Clear Logs</button>
+                <button class="nav-btn" style="width: 85%; justify-content: center; color: #ef4444;" onclick="clearLogs()"><i class="fas fa-trash"></i> <span>Clear Logs</span></button>
             </div>
         </aside>
         <main class="main-content">
@@ -46,21 +44,40 @@
     <script>
         let currentPage = 1;
         const itemsPerPage = 10;
-        let fullHistory = JSON.parse(localStorage.getItem('awaazSetu_FullHistory') || '[]');
+        let logsFromDB = [];
+
+        async function fetchLogs() {
+            try {
+                const res = await fetch('/api/history');
+                logsFromDB = await res.json();
+                renderPage(1);
+            } catch (e) {
+                console.error("Failed to load history", e);
+                document.getElementById('history-body').innerHTML = "<tr><td colspan='3' style='text-align:center;'>Error loading data</td></tr>";
+            }
+        }
+
+        async function clearLogs() {
+            if(confirm("Permanently wipe all logs from MongoDB?")) {
+                await fetch('/api/clear', { method: 'POST' });
+                fetchLogs();
+            }
+        }
+
         function renderPage(page) {
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
-            const items = fullHistory.slice(start, end);
+            const items = logsFromDB.slice(start, end);
             const tbody = document.getElementById('history-body');
-            tbody.innerHTML = items.length === 0 ? "<tr><td colspan='3' style='text-align:center; opacity:0.5;'>No logs found</td></tr>" : items.map(i => `<tr><td>${i.time}</td><td>${i.text}</td><td>${i.lang.toUpperCase()}</td></tr>`).join('');
+            tbody.innerHTML = items.length === 0 ? "<tr><td colspan='3' style='text-align:center; opacity:0.5;'>No logs found</td></tr>" : items.map(i => `<tr><td>${i.time}</td><td>${i.text}</td><td>${i.language.toUpperCase()}</td></tr>`).join('');
             document.getElementById('page-num').textContent = `Page ${page}`;
             document.getElementById('prev-btn').disabled = page === 1;
-            document.getElementById('next-btn').disabled = end >= fullHistory.length;
+            document.getElementById('next-btn').disabled = end >= logsFromDB.length;
         }
-        function clearLogs() { if(confirm("Wipe all query history?")) { localStorage.removeItem('awaazSetu_FullHistory'); fullHistory = []; renderPage(1); } }
+
         document.getElementById('prev-btn').onclick = () => { if(currentPage > 1) renderPage(--currentPage); };
-        document.getElementById('next-btn').onclick = () => { if(currentPage * itemsPerPage < fullHistory.length) renderPage(++currentPage); };
-        renderPage(1);
+        document.getElementById('next-btn').onclick = () => { if(currentPage * itemsPerPage < logsFromDB.length) renderPage(++currentPage); };
+        fetchLogs();
     </script>
 </body>
 </html>
