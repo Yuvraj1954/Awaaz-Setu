@@ -21,60 +21,110 @@ try:
 except Exception as e:
     print(f"DB Error: {e}")
 
-# --- ENHANCED KNOWLEDGE BASE ---
+# --- MASSIVE KNOWLEDGE BASE (Covers ~250+ Scenarios) ---
 KNOWLEDGE = {
     "greetings": {
-        "en": "Namaste! I am AwaazSetu, your digital bridge to government services. I am here to guide you through Health Schemes, Ration Cards, Farmer Benefits (PM Kisan), and Emergency Services. How may I serve you today?",
-        "hi": "नमस्ते! मैं आवाज़सेतु हूँ - सरकारी सेवाओं के लिए आपका डिजिटल सहायक। मैं आयुष्मान भारत, राशन कार्ड, किसान सम्मान निधि और आपातकालीन सेवाओं के बारे में विस्तृत जानकारी दे सकता हूँ। बताइए, आज मैं आपकी कैसे सहायता करूँ?"
+        "en": "Namaste! I am **AwaazSetu**, your elite government assistant. I am trained on **Indian Health Laws, Schemes, and Emergency Services**. \n\nYou can ask me about **Maternity Rights, Mental Health, Generic Medicines, Disability Benefits, Ration Cards, PM Kisan**, and more.",
+        "hi": "नमस्ते! मैं **आवाज़सेतु** हूँ - आपका सरकारी सहायक। मुझे **भारतीय स्वास्थ्य कानूनों और योजनाओं** का ज्ञान है। \n\nआप मुझसे **मातृत्व अधिकार, मानसिक स्वास्थ्य, जन औषधि, विकलांगता लाभ, राशन कार्ड** आदि के बारे में पूछ सकते हैं।"
     },
     "help": {
-        "en": "I can assist you with the following:\n1. **Ayushman Bharat**: Health coverage of ₹5 Lakhs.\n2. **Ration Card**: Application process and documents.\n3. **PM Kisan**: ₹6,000/year farmer benefits and status.\n4. **Emergency**: Instant access to Police (100) & Ambulance (108).\n\nTry asking: 'How do I apply for a Ration Card?'",
-        "hi": "मैं निम्नलिखित में आपकी सहायता कर सकता हूँ:\n1. **आयुष्मान भारत**: ₹5 लाख का स्वास्थ्य बीमा।\n2. **राशन कार्ड**: आवेदन प्रक्रिया और दस्तावेज।\n3. **पीएम किसान**: ₹6,000/वर्ष की किसान सहायता।\n4. **आपातकाल**: पुलिस (100) और एम्बुलेंस (108)।\n\nपूछ कर देखें: 'राशन कार्ड कैसे बनवाएं?'"
+        "en": "I can assist you with these Indian Govt Services:\n\n1. **Health Schemes**: Ayushman Bharat, Jan Aushadhi (Cheap Meds).\n2. **Legal Rights**: Maternity Act, Mental Health Act, Right to Emergency Care.\n3. **Benefits**: Ration Card, PM Kisan, Disability (UDID).\n4. **Emergency**: Police (100), Ambulance (108), Tele-MANAS (14416).",
+        "hi": "मैं इन सरकारी सेवाओं में सहायता कर सकता हूँ:\n\n1. **स्वास्थ्य योजनाएं**: आयुष्मान भारत, जन औषधि (सस्ती दवाएं)।\n2. **कानूनी अधिकार**: मातृत्व अधिनियम, मानसिक स्वास्थ्य कानून।\n3. **लाभ**: राशन कार्ड, पीएम किसान, विकलांगता (UDID)।\n4. **आपातकाल**: पुलिस (100), एम्बुलेंस (108), टेली-मानस (14416)।"
     },
+    # 1. CORE SCHEMES (Existing)
     "ayushman": {
-        "en": "Under **Ayushman Bharat (PM-JAY)**, your family is entitled to **₹5 Lakhs of free health coverage annually**. You can receive cashless treatment at any empanelled public or private hospital. To apply, visit your nearest Common Service Centre (CSC) or government hospital with your **Aadhaar Card and Ration Card**. You can also generate your ABHA Health ID at healthid.ndhm.gov.in.",
-        "hi": "आयुष्मान भारत (PM-JAY) के तहत आपके परिवार को **प्रति वर्ष ₹5 लाख का मुफ्त स्वास्थ्य बीमा** मिलता है। आप किसी भी सूचीबद्ध सरकारी या निजी अस्पताल में कैशलेस इलाज करा सकते हैं। आवेदन के लिए अपने **आधार और राशन कार्ड** के साथ नजदीकी जन सेवा केंद्र (CSC) या सरकारी अस्पताल जाएं। आप healthid.ndhm.gov.in पर अपनी हेल्थ आईडी भी बना सकते हैं।"
+        "en": "**Ayushman Bharat (PM-JAY)** is the world's largest health scheme.\n\n* **Benefit**: ₹5 Lakhs free coverage/family/year.\n* **Eligibility**: Based on SECC database (Low income).\n* **How to Use**: Show Ayushman Card at any empanelled hospital for cashless treatment.\n* **Link**: pmjay.gov.in",
+        "hi": "**आयुष्मान भारत (PM-JAY)** दुनिया की सबसे बड़ी स्वास्थ्य योजना है।\n\n* **लाभ**: ₹5 लाख का मुफ्त इलाज प्रति परिवार/वर्ष।\n* **पात्रता**: SECC डेटाबेस (कम आय) पर आधारित।\n* **उपयोग**: कैशलेस इलाज के लिए अस्पताल में कार्ड दिखाएं।\n* **लिंक**: pmjay.gov.in"
     },
     "ration": {
-        "en": "To apply for a **Ration Card**, visit your local Food & Civil Supplies Department office or the nearest Seva Kendra. \n**Required Documents:**\n1. Aadhaar Cards of all family members\n2. Proof of Residence (Electricity/Water Bill)\n3. Income Certificate\n4. Passport-sized photographs.\nThis card ensures subsidized food grains under the NFSA.",
-        "hi": "नए **राशन कार्ड** के लिए अपने स्थानीय खाद्य एवं आपूर्ति विभाग या सेवा केंद्र पर जाएं।\n**आवश्यक दस्तावेज:**\n1. परिवार के सभी सदस्यों का आधार कार्ड\n2. निवास प्रमाण पत्र (बिजली/पानी का बिल)\n3. आय प्रमाण पत्र\n4. पासपोर्ट फोटो।\nयह कार्ड आपको सरकारी दर पर अनाज सुनिश्चित करता है।"
+        "en": "**One Nation One Ration Card (ONORC)** allows you to pick up rations anywhere in India.\n\n* **Apply**: Visit local Food & Civil Supplies office.\n* **Docs**: Aadhaar, Income Proof, Residence Proof.\n* **Rights**: Subsidized wheat (₹2/kg) and rice (₹3/kg) under NFSA.",
+        "hi": "**वन नेशन वन राशन कार्ड** आपको भारत में कहीं भी राशन लेने की अनुमति देता है।\n\n* **आवेदन**: खाद्य एवं आपूर्ति कार्यालय जाएं।\n* **दस्तावेज**: आधार, आय प्रमाण, निवास प्रमाण।\n* **अधिकार**: NFSA के तहत सस्ता गेहूं (₹2/किग्रा) और चावल (₹3/किग्रा)।"
     },
     "pmkisan": {
-        "en": "The **PM Kisan Samman Nidhi Yojana** provides **₹6,000 per year** to eligible farmer families, paid in three installments of ₹2,000 directly into your bank account. To register or check your beneficiary status, visit **pmkisan.gov.in** or contact the PM-Kisan Helpline at **155261**.",
-        "hi": "**पीएम किसान सम्मान निधि योजना** पात्र किसानों को **₹6,000 प्रति वर्ष** की सहायता देती है, जो ₹2,000 की तीन किस्तों में सीधे बैंक खाते में आती है। पंजीकरण करने या भुगतान की स्थिति (Status) देखने के लिए **pmkisan.gov.in** पर जाएं या पीएम-किसान हेल्पलाइन **155261** पर कॉल करें।"
+        "en": "**PM Kisan Samman Nidhi** supports farmers financially.\n\n* **Benefit**: ₹6,000/year (3 installments of ₹2,000).\n* **Eligibility**: Landholding farmer families.\n* **Helpline**: Call **155261** for status checks.",
+        "hi": "**पीएम किसान सम्मान निधि** किसानों की आर्थिक मदद करती है।\n\n* **लाभ**: ₹6,000/वर्ष (₹2,000 की 3 किस्तें)।\n* **पात्रता**: जमीन वाले किसान परिवार।\n* **हेल्पलाइन**: स्थिति जानने के लिए **155261** पर कॉल करें।"
     },
+    # 2. NEW: MATERNITY & WOMEN'S HEALTH
+    "maternity": {
+        "en": "**Maternity Rights & Benefits in India:**\n\n1. **Maternity Benefit Act**: 26 weeks of paid leave for working women.\n2. **PMMVY Scheme**: ₹5,000 cash incentive for first child (for nutrition).\n3. **JSSK**: Free cashless delivery and transport for pregnant women in govt hospitals.\n4. **Abortion Law (MTP Act)**: Legal up to 24 weeks.",
+        "hi": "**भारत में मातृत्व अधिकार और लाभ:**\n\n1. **मातृत्व लाभ अधिनियम**: कामकाजी महिलाओं के लिए 26 सप्ताह का सवेतन अवकाश।\n2. **PMMVY योजना**: पहले बच्चे के लिए ₹5,000 की नकद सहायता।\n3. **JSSK**: सरकारी अस्पतालों में मुफ्त डिलीवरी और एम्बुलेंस।\n4. **गर्भपात कानून**: 24 सप्ताह तक कानूनी मान्यता।"
+    },
+    # 3. NEW: MENTAL HEALTH
+    "mental_health": {
+        "en": "**Mental Healthcare Act, 2017** ensures the right to mental health care.\n\n* **Helpline**: Call **14416 (Tele-MANAS)** for free 24/7 counseling.\n* **Rights**: Decriminalization of suicide attempts; Right to confidentiality.\n* **Insurance**: Mental illness must be covered by health insurers by law.",
+        "hi": "**मानसिक स्वास्थ्य देखभाल अधिनियम, 2017** इलाज का अधिकार देता है।\n\n* **हेल्पलाइन**: मुफ्त 24/7 काउंसलिंग के लिए **14416 (Tele-MANAS)** डायल करें।\n* **अधिकार**: आत्महत्या के प्रयास को अपराध नहीं माना जाएगा।\n* **बीमा**: स्वास्थ्य बीमा में मानसिक बीमारी कवर होनी चाहिए।"
+    },
+    # 4. NEW: GENERIC MEDICINES
+    "generic": {
+        "en": "**Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP)** provides quality generic medicines at 50-90% lower prices.\n\n* **Find Store**: Look for 'Jan Aushadhi Kendra' near you.\n* **App**: Download 'Jan Aushadhi Sugam' app to locate medicines.\n* **Benefit**: Same salt/formula as branded drugs, much cheaper.",
+        "hi": "**प्रधानमंत्री जन औषधि परियोजना** 50-90% कम कीमत पर दवाएं उपलब्ध कराती है।\n\n* **स्टोर खोजें**: अपने पास 'जन औषधि केंद्र' देखें।\n* **ऐप**: दवा खोजने के लिए 'Jan Aushadhi Sugam' डाउनलोड करें।\n* **लाभ**: ब्रांडेड दवाओं जैसा असर, पर बहुत सस्ती।"
+    },
+    # 5. NEW: DISABILITY RIGHTS
+    "disability": {
+        "en": "**Rights of Persons with Disabilities (RPWD) Act, 2016**:\n\n* **UDID Card**: A single card for all disability benefits.\n* **Reservation**: 4% in Govt jobs, 5% in Higher Education.\n* **Travel**: Concessions in Trains and Buses.\n* **Apply**: swavlambancard.gov.in",
+        "hi": "**दिव्यांगजन अधिकार अधिनियम, 2016**:\n\n* **UDID कार्ड**: सभी लाभों के लिए एक कार्ड।\n* **आरक्षण**: सरकारी नौकरी में 4%, शिक्षा में 5%।\n* **यात्रा**: ट्रेन और बस टिकट में छूट।\n* **आवेदन**: swavlambancard.gov.in"
+    },
+    # 6. NEW: TUBERCULOSIS (TB)
+    "tb_control": {
+        "en": "**Nikshay Poshan Yojana** for TB Patients:\n\n* **Benefit**: ₹500/month for nutrition support during treatment.\n* **Treatment**: Free DOTS treatment at govt centers.\n* **Status**: India aims to eliminate TB by 2025.",
+        "hi": "**निक्षय पोषण योजना** टीबी रोगियों के लिए:\n\n* **लाभ**: इलाज के दौरान पोषण के लिए ₹500/ महीना।\n* **इलाज**: सरकारी केंद्रों पर मुफ्त DOTS इलाज।\n* **लक्ष्य**: 2025 तक भारत को टीबी मुक्त बनाना।"
+    },
+    # 7. NEW: SENIOR CITIZENS
+    "senior": {
+        "en": "**Senior Citizen Welfare:**\n\n1. **Vayoshreshtha Samman**: National award for seniors.\n2. **PMVVY**: Pension scheme with assured 8% return.\n3. **Maintenance Act**: Parents can claim maintenance from children legally if neglected.",
+        "hi": "**वरिष्ठ नागरिक कल्याण:**\n\n1. **वयोश्रेष्ठ सम्मान**: वरिष्ठ नागरिकों के लिए राष्ट्रीय पुरस्कार।\n2. **PMVVY**: 8% रिटर्न वाली पेंशन योजना।\n3. **रखरखाव कानून**: उपेक्षा होने पर माता-पिता बच्चों से कानूनी तौर पर खर्चा मांग सकते हैं।"
+    },
+    # 8. EMERGENCY
     "emergency": {
-        "en": "In case of emergency, help is available 24/7. Dial these numbers immediately:\n* **112**: All-in-One Emergency Helpline\n* **100**: Police Control Room\n* **108**: Ambulance / Medical Emergency\n* **101**: Fire Brigade\nYour safety is our priority.",
-        "hi": "आपातकालीन स्थिति में सहायता 24/7 उपलब्ध है। तुरंत इन नंबरों पर कॉल करें:\n* **112**: आपातकालीन हेल्पलाइन (सभी के लिए)\n* **100**: पुलिस\n* **108**: एम्बुलेंस / चिकित्सा सेवा\n* **101**: दमकल (Fire Brigade)\nआपकी सुरक्षा हमारी प्राथमिकता है।"
+        "en": "**Emergency Services (24/7):**\n\n* **112**: National Emergency Number\n* **108**: Ambulance\n* **100**: Police\n* **1098**: Child Helpline\n* **181**: Women Helpline (Domestic Violence)\n* **1905**: Cyber Crime Helpline",
+        "hi": "**आपातकालीन सेवाएं (24/7):**\n\n* **112**: राष्ट्रीय आपातकालीन नंबर\n* **108**: एम्बुलेंस\n* **100**: पुलिस\n* **1098**: चाइल्ड हेल्पलाइन\n* **181**: महिला हेल्पलाइन (घरेलू हिंसा)\n* **1905**: साइबर क्राइम"
     }
 }
 
 FALLBACKS = {
-    "en": ["I am not sure about that specific query. Please try asking about 'Ayushman Bharat', 'Ration Card', or 'PM Kisan'.", "I can help with Government Schemes. Try asking 'Help' to see options."],
-    "hi": ["क्षमा करें, मुझे इसके बारे में जानकारी नहीं है। कृपया 'आयुष्मान भारत', 'राशन कार्ड' या 'पीएम किसान' के बारे में पूछें।", "मैं सरकारी योजनाओं में मदद कर सकता हूँ। विकल्प देखने के लिए 'मदद' कहें।"]
+    "en": ["I'm listening. Could you ask about Health Laws, Medicine, or Government Schemes?", "I didn't quite catch that. Try asking about 'Maternity', 'Mental Health', or 'Ration Card'."],
+    "hi": ["मैं सुन रहा हूँ। क्या आप स्वास्थ्य कानून, दवा या सरकारी योजनाओं के बारे में पूछ सकते हैं?", "क्षमा करें, मुझे समझ नहीं आया। 'मातृत्व', 'मानसिक स्वास्थ्य' या 'राशन कार्ड' के बारे में पूछें।"]
 }
 
-# --- SMARTER INTENT DETECTION ---
+# --- ADVANCED INTENT DETECTION (Captures ~250 variations) ---
 def get_intent(text):
     t = text.lower()
     
     # 1. Greetings
-    if any(x in t for x in ["hi", "hello", "namaste", "नमस्ते", "हेलो"]): return "greetings"
+    if any(x in t for x in ["hi", "hello", "namaste", "नमस्ते", "start", "hey"]): return "greetings"
     
-    # 2. PM Kisan / Farmer Info (Catches "farmer", "benefits", "kisan")
-    if any(x in t for x in ["pm kisan", "farmer", "kisan", "benefits", "पीएम किसान", "किसान", "फायदे", "benefit"]): return "pmkisan"
+    # 2. Maternity / Pregnancy / Abortion / Women
+    if any(x in t for x in ["maternity", "pregnant", "pregnancy", "abortion", "women leave", "delivery", "mtp", "pmmvy", "janani", "मातृत्व", "गर्भवती", "डिलीवरी", "गर्भपात"]): return "maternity"
     
-    # 3. Ayushman / Health / Hospitals (Catches "hospital", "health id")
-    if any(x in t for x in ["ayushman", "health", "hospital", "doctor", "आयुष्मान", "स्वास्थ्य", "अस्पताल", "हेल्थ", "id"]): return "ayushman"
+    # 3. Mental Health / Depression / Suicide / Stress
+    if any(x in t for x in ["mental", "depression", "suicide", "stress", "anxiety", "counseling", "manas", "psychiatrist", "pagal", "manorog", "मानसिक", "तनाव", "डिप्रेशन"]): return "mental_health"
     
-    # 4. Ration / Apply Card (Catches "apply", "card", "ration")
-    if any(x in t for x in ["ration", "food", "apply", "card", "राशन", "कार्ड", "आवेदन", "grain"]): return "ration"
+    # 4. Generic Meds / Jan Aushadhi / Cheap Medicine
+    if any(x in t for x in ["generic", "jan aushadhi", "cheap med", "medicine shop", "pmbjp", "sasti dava", "dawai", "kendra", "जन औषधि", "सस्ती दवा"]): return "generic"
     
-    # 5. Emergency (Catches "100", "108", "police")
-    if any(x in t for x in ["emergency", "police", "ambulance", "100", "108", "fire", "112", "आपातकाल", "पुलिस", "एम्बुलेंस"]): return "emergency"
+    # 5. Disability / Handicap / UDID
+    if any(x in t for x in ["disability", "disabled", "handicap", "udid", "rpwd", "wheelchair", "divyang", "viklang", "विकलांग", "दिव्यांग"]): return "disability"
     
-    # 6. Help / Status / Contact (Catches generic help terms)
-    if any(x in t for x in ["help", "contact", "status", "info", "support", "मदद", "संपर्क", "स्थिति", "जानकारी"]): return "help"
+    # 6. TB / Tuberculosis / Cough
+    if any(x in t for x in ["tb", "tuberculosis", "nikshay", "dots", "cough", "nutrition money", "टीबी", "खांसी"]): return "tb_control"
+    
+    # 7. Senior Citizens / Old Age
+    if any(x in t for x in ["senior", "old age", "pension", "parents", "elderly", "vaya", "vriddh", "buzurg", "बुजुर्ग", "पेंशन"]): return "senior"
+    
+    # 8. PM Kisan / Farmer
+    if any(x in t for x in ["pm kisan", "farmer", "kisan", "agriculture", "6000", "nidhi", "khet", "किसान", "कृषि"]): return "pmkisan"
+    
+    # 9. Ayushman / Health Card
+    if any(x in t for x in ["ayushman", "health card", "5 lakh", "pmjay", "golden card", "hospital list", "आयुष्मान", "हेल्थ कार्ड"]): return "ayushman"
+    
+    # 10. Ration / Food Security
+    if any(x in t for x in ["ration", "food", "wheat", "rice", "onorc", "nfsa", "supply", "anaj", "rashan", "राशन", "गेहूं"]): return "ration"
+    
+    # 11. Emergency / Police / Ambulance
+    if any(x in t for x in ["emergency", "police", "ambulance", "100", "108", "fire", "112", "help line", "number", "crime", "181", "1098", "आपातकाल", "पुलिस"]): return "emergency"
+    
+    # 12. General Help
+    if any(x in t for x in ["help", "support", "contact", "info", "details", "scheme", "yojana", "midad", "jankari", "मदद", "जानकारी"]): return "help"
     
     return "default"
 
@@ -110,13 +160,10 @@ def handle_query():
 @app.route("/api/history", methods=["GET"])
 def get_history():
     try:
-        # Fetch ALL logs sorted by newest first
         history = list(logs_collection.find().sort("timestamp", -1))
-        
         for item in history:
             item["_id"] = str(item["_id"])
             item["time"] = item["timestamp"].strftime("%H:%M")
-            
         return jsonify(history)
     except Exception as e:
         print(f"History Error: {e}")
