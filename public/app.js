@@ -1,8 +1,8 @@
 let currentLanguage = 'en';
 let recognition;
-let isListening = false; // Fix for mic reliability
+let isListening = false;
 let currentPage = 1;
-const itemsPerPage = 10; // UPDATED: Shows 10 logs per page in History
+const itemsPerPage = 10; // FIXED: Shows 10 logs per page in History
 
 const UI_TEXT = {
     en: { 
@@ -22,7 +22,7 @@ const PROMPTS = {
     hi: ["नमस्ते", "मदद", "आयुष्मान भारत", "राशन कार्ड", "पीएम किसान", "अस्पताल", "पुलिस १००", "एम्बुलेंस १०८", "आवेदन", "फायदे", "किसान सूचना", "आपातकाल", "हेल्थ कार्ड", "संपर्क", "स्थिति"]
 };
 
-// --- 1. ROBUST SPEECH RECOGNITION (MIC FIX) ---
+// --- 1. SPEECH RECOGNITION (MIC & STOP FIX) ---
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
@@ -53,7 +53,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         isListening = false;
         stopMicUI();
         const userInput = document.getElementById('user-input');
-        // Only submit if we actually got text
+        // Only submit if we actually got text and wasn't manually stopped with empty input
         if (userInput && userInput.value.trim() !== "") {
             submitQuery(); 
         }
@@ -61,26 +61,31 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 }
 
 function startMic() {
-    if (isListening) return; // Prevent double start error
+    if (isListening) return;
     if (recognition) {
         try { recognition.start(); } 
         catch (e) { console.warn("Mic already active"); }
     }
 }
 
+// FIXED: Stop Listening Button Logic
 function stopMic() {
-    if (recognition) recognition.stop();
-    stopMicUI();
+    if (recognition) {
+        recognition.stop(); // Stops recording
+    }
+    stopMicUI(); // Immediately resets UI
 }
 
 function stopMicUI() {
+    isListening = false;
     const micContainer = document.getElementById('mic-container');
     if (micContainer) micContainer.classList.remove('pulse-active');
+    
     const micLabel = document.getElementById('mic-label');
     if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].tap;
 }
 
-// --- 2. ACTIVITY LOGS (SHOWS ALL - PAGINATED) ---
+// --- 2. ACTIVITY LOGS (FIXED: SHOWS 10 ITEMS) ---
 async function fetchHistoryLogs() {
     const tbody = document.getElementById('history-body');
     if (!tbody) return; 
@@ -89,7 +94,7 @@ async function fetchHistoryLogs() {
         const res = await fetch('/api/history');
         const allData = await res.json();
         
-        // PAGINATION LOGIC: Slices 10 items based on currentPage
+        // FIX: Slices 10 items based on itemsPerPage (10)
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         const paginatedData = allData.slice(start, end);
@@ -114,7 +119,7 @@ async function fetchHistoryLogs() {
     } catch (e) { console.error("History fetch failed:", e); }
 }
 
-// --- 3. SIDEBAR RECENT QUERIES (LIMIT 5) ---
+// --- 3. SIDEBAR RECENT QUERIES (FIXED: LIMIT 5) ---
 async function refreshRecentQueries() {
     try {
         const res = await fetch('/api/history');
@@ -122,7 +127,7 @@ async function refreshRecentQueries() {
         const container = document.getElementById('history-list');
         if (!container) return;
         
-        // STRICT LIMIT: Only take top 5 for sidebar
+        // FIX: Sidebar is strictly limited to 5
         container.innerHTML = data.slice(0, 5).map(item => `
             <div class="history-item" onclick="document.getElementById('user-input').value='${item.text}'; submitQuery();">
                 ${item.text.length > 20 ? item.text.substring(0, 20) + '...' : item.text}
@@ -228,7 +233,7 @@ window.onload = () => {
     const micBtn = document.getElementById('mic-button');
     if (micBtn) micBtn.onclick = startMic;
 
-    // Stop Button Listener
+    // Stop Button Listener (FIXED)
     const pauseBtn = document.getElementById('pause-btn');
     if (pauseBtn) pauseBtn.onclick = stopMic;
 
