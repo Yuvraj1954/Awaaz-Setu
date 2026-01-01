@@ -10,13 +10,75 @@
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; }
 .app-layout { display: flex; height: 100vh; }
 
-/* Sidebar */
-.sidebar { width: 260px; background: rgba(0,0,0,0.3); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 1.5rem; backdrop-filter: blur(20px); }
-.side-logo-container { text-align: center; padding: 1rem 0 2rem 0; font-size: 2.2rem; color: var(--primary); }
-.nav-btn { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 10px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; color: #94a3b8; cursor: pointer; transition: 0.3s; font-weight: 600; }
+/* Sidebar - Centered Alignment */
+.sidebar { 
+    width: 260px; 
+    background: rgba(0,0,0,0.3); 
+    border-right: 1px solid var(--border); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; /* Centers items horizontally */
+    padding: 1.5rem; 
+    backdrop-filter: blur(20px); 
+}
+
+.side-logo-container { 
+    text-align: center; 
+    padding: 1rem 0 2rem 0; 
+    font-size: 2.2rem; 
+    color: var(--primary); 
+}
+
+.side-nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers buttons */
+}
+
+.nav-btn { 
+    width: 90%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; /* Centers icon and text inside button */
+    gap: 12px; 
+    padding: 12px; 
+    margin-bottom: 10px; 
+    background: var(--glass); 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    color: #94a3b8; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    font-weight: 600; 
+}
+
 .nav-btn.active { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--primary); }
-.history-label { font-size: 0.7rem; font-weight: 800; color: #64748b; letter-spacing: 0.15em; text-transform: uppercase; margin: 1.5rem 0 0.5rem 0.5rem; display: block; }
-.history-container { flex: 1; overflow-y: auto; }
+
+.history-label { 
+    font-size: 0.7rem; 
+    font-weight: 800; 
+    color: #64748b; 
+    letter-spacing: 0.15em; 
+    text-transform: uppercase; 
+    margin: 1.5rem 0 0.5rem 0; 
+    display: block; 
+    text-align: center; /* Centers the label text */
+}
+
+.history-container { 
+    flex: 1; 
+    overflow-y: auto; 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; /* Centers the list items */
+}
+
+.history-item {
+    width: 90%;
+    text-align: center; /* Centers text inside the query snippets */
+}
 
 /* Waveform Animation */
 .waveform { display: flex; align-items: center; justify-content: center; gap: 4px; height: 40px; }
@@ -41,24 +103,23 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark);
 #mic-label { font-weight: 600; font-size: 1.4rem; margin-top: 10px; margin-bottom: 5px; }
 .stop-trigger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 10px 24px; border-radius: 100px; cursor: pointer; font-weight: 600; margin-top: 15px; }
 
-/* Response Section with Scroll Limit */
+/* Response Section */
 .response-panel { 
     margin-top: 30px; 
     border-top: 1px solid var(--border); 
     padding-top: 20px; 
-    max-height: 250px; /* FIXED LIMIT */
-    overflow-y: auto;  /* ENABLE SCROLL */
+    max-height: 250px; 
+    overflow-y: auto; 
     scroll-behavior: smooth;
     padding-right: 5px;
 }
 
-/* Custom Scrollbar */
 .response-panel::-webkit-scrollbar { width: 4px; }
 .response-panel::-webkit-scrollbar-track { background: transparent; }
 .response-panel::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
 .resp-head { font-weight: 800; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-#response-text { line-height: 1.6; font-size: 1.1rem; margin-bottom: 10px; text-align: left; }
+#response-text { line-height: 1.6; font-size: 1.1rem; margin-bottom: 10px; text-align: center; /* Centered response text */ }
 
 .btn-action { 
     background: var(--primary); 
@@ -72,6 +133,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark);
     margin-top: 15px; 
 }
 
+/* Language Switcher & Status Dot */
 .status-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 14px; border-radius: 100px; font-size: 0.85rem; margin-top: 10px; }
 .pulse-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse-green 2s infinite; }
 @keyframes pulse-green { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
