@@ -1,49 +1,86 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+let currentLanguage = 'en';
+let recognition;
+let isListening = false;
 
-app = Flask(__name__)
-CORS(app)
+const translations = {
+    en: { micLabel: 'Tap to Speak', listening: 'Listening...', status: 'Bridge Active' },
+    hi: { micLabel: 'बोलने के लिए टैप करें', listening: 'सुन रहा हूँ...', status: 'ब्रिज सक्रिय है' }
+};
 
-# 100+ Variation Knowledge Base
-KNOWLEDGE = {
-    "emergency": {
-        "en": "Emergency detected. Dial 112 for Police or 108 for an Ambulance immediately.",
-        "hi": "आपातकाल की स्थिति। तुरंत पुलिस के लिए 112 या एम्बुलेंस के लिए 108 डायल करें।"
-    },
-    "hospital": {
-        "en": "The nearest Government Hospital or PHC is available 24/7. Use your Ayushman card for free care.",
-        "hi": "निकटतम सरकारी अस्पताल या PHC 24/7 उपलब्ध है। मुफ्त इलाज के लिए अपने आयुष्मान कार्ड का उपयोग करें।"
-    },
-    "ration": {
-        "en": "You can apply for a new Ration Card at the State Food Portal. Keep your Aadhaar ready.",
-        "hi": "आप राज्य खाद्य पोर्टल पर नए राशन कार्ड के लिए आवेदन कर सकते हैं। अपना आधार तैयार रखें।"
-    },
-    "pregnancy": {
-        "en": "Under JSY, pregnant women get free checkups and cash aid. Visit your local Anganwadi.",
-        "hi": "JSY के तहत, गर्भवती महिलाओं को मुफ्त जांच और नकद सहायता मिलती है। अपनी स्थानीय आंगनवाड़ी पर जाएँ।"
-    },
-    "pension": {
-        "en": "Old age and widow pensions can be applied for at the Social Welfare office or CSC centers.",
-        "hi": "वृद्धावस्था और विधवा पेंशन के लिए समाज कल्याण कार्यालय या CSC केंद्रों पर आवेदन किया जा सकता है।"
-    },
-    "default": {
-        "en": "I can help with Hospitals, Ration Cards, and Government schemes. Try asking about Ayushman Bharat.",
-        "hi": "मैं अस्पताल, राशन कार्ड और सरकारी योजनाओं में मदद कर सकता हूँ। आयुष्मान भारत के बारे में पूछें।"
-    }
+// Clear speech on startup
+window.speechSynthesis.cancel();
+
+function addToHistory(text) {
+    const container = document.getElementById('history-list');
+    const item = document.createElement('div');
+    item.style = "background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; font-size: 0.8rem; margin-top: 10px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-weight: 600;";
+    item.textContent = text.length > 25 ? text.substring(0, 25) + "..." : text;
+    item.onclick = () => { document.getElementById('user-input').value = text; submitQuery(); };
+    container.prepend(item);
 }
 
-def get_intent(text):
-    t = text.lower()
-    if any(x in t for x in ["police", "accident", "danger", "112", "108", "बचाओ", "पुलिस", "खतरा"]): return "emergency"
-    if any(x in t for x in ["hospital", "doctor", "medical", "sick", "अस्पताल", "डॉक्टर", "तबीयत"]): return "hospital"
-    if any(x in t for x in ["ration", "food card", "quota", "राशन", "कोटा", "कार्ड"]): return "ration"
-    if any(x in t for x in ["pregnant", "baby", "delivery", "maternity", "गर्भवती", "प्रसव", "बच्चा"]): return "pregnancy"
-    if any(x in t for x in ["pension", "60 years", "old age", "पेंशन", "बुढ़ापा"]): return "pension"
-    return "default"
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.onstart = () => { 
+        isListening = true; 
+        document.getElementById('mic-label').textContent = translations[currentLanguage].listening; 
+        document.querySelector('.inner-circle').style.transform = 'scale(1.2)'; 
+    };
+    recognition.onresult = (e) => { 
+        document.getElementById('user-input').value = e.results[0][0].transcript; 
+    };
+    recognition.onend = () => { 
+        isListening = false; 
+        document.getElementById('mic-label').textContent = translations[currentLanguage].micLabel; 
+        document.querySelector('.inner-circle').style.transform = 'scale(1)'; 
+        if (document.getElementById('user-input').value) submitQuery(); 
+    };
+}
 
-@app.route("/api/query", methods=["POST"])
-def handle_query():
-    data = request.json
-    intent = get_intent(data.get("text", ""))
-    lang = data.get("language", "en")
-    return jsonify({"response": KNOWLEDGE[intent][lang]})
+async function submitQuery() {
+    const text = document.getElementById('user-input').value;
+    if (!text) return;
+    addToHistory(text);
+    try {
+        const res = await fetch('/api/query', { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ text, language: currentLanguage }) 
+        });
+        const data = await res.json();
+        document.getElementById('response-text').textContent = data.response;
+        document.getElementById('response-section').style.display = 'block';
+        
+        // Voice Logic
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(data.response);
+        u.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
+        window.speechSynthesis.speak(u);
+    } catch (e) { console.error(e); }
+}
+
+document.getElementById('mic-button').onclick = () => { 
+    recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN'; 
+    isListening ? recognition.stop() : recognition.start(); 
+};
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.onclick = () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLanguage = btn.dataset.lang;
+        document.getElementById('status-text').textContent = translations[currentLanguage].status;
+        document.getElementById('mic-label').textContent = translations[currentLanguage].micLabel;
+    };
+});
+
+document.getElementById('new-query-btn').onclick = () => {
+    document.getElementById('response-section').style.display = 'none';
+    document.getElementById('user-input').value = '';
+    window.speechSynthesis.cancel();
+};
+
+document.getElementById('pause-btn').onclick = () => {
+    window.speechSynthesis.cancel();
+    if (recognition) recognition.stop();
+};
