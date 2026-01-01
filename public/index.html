@@ -1,127 +1,78 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AwaazSetu - Voice Bridge to Services</title>
-        <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon.png">
-    <link rel="shortcut icon" href="/public/favicon.ico">
-
-    <!-- Mobile Icons -->
-    <link rel="apple-touch-icon" sizes="192x192" href="/public/icon-192.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="/public/icon-512.png">
+    <title>AwaazSetu | Elite Voice Assistant</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="browser-warning">
-        <div class="warning-text">
-            <span class="warning-icon">⚠️</span>
-            <span class="warning-message">Please use Google Chrome browser for the best experience. Voice features work best on Chrome.</span>
-            <span class="warning-icon">⚠️</span>
-            <span class="warning-message">Please use Google Chrome browser for the best experience. Voice features work best on Chrome.</span>
-        </div>
-    </div>
-    <div class="app-wrapper">
-        <header class="app-header">
-            <div class="logo-area">
-                <div class="logo-icon">
-                    <i class="fas fa-satellite-dish"></i>
+    <div class="mesh-gradient"></div>
+    
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="side-logo"><i class="fas fa-satellite-dish"></i></div>
+            <nav class="side-nav">
+                <button class="nav-item active" title="Home"><i class="fas fa-home"></i></button>
+                <button class="nav-item" title="History"><i class="fas fa-history"></i></button>
+                <button class="nav-item" title="Settings"><i class="fas fa-cog"></i></button>
+            </nav>
+            <div id="history-list" class="history-container">
                 </div>
-                <div class="logo-text">
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="brand">
                     <h1 id="app-title">AwaazSetu</h1>
-                    <p id="app-subtitle">Your Voice Bridge to Services</p>
-                    <p id="app-tagline">Speak in Hindi or English to get help with government and healthcare services.</p>
+                    <div class="status-pill"><span class="pulse-dot"></span> <span id="app-subtitle">Bridge Active</span></div>
+                </div>
+                <div class="language-pill">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="hi">हिन्दी</button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <p id="app-tagline" class="hero-text">Your voice bridge to government and healthcare services.</p>
+
+                <div class="interaction-zone">
+                    <div class="mic-portal" id="mic-button">
+                        <div class="outer-glow"></div>
+                        <div class="inner-circle"><i class="fas fa-microphone"></i></div>
+                        <h2 id="mic-label">Ready to Listen</h2>
+                    </div>
+
+                    <button id="pause-btn" class="stop-trigger">Stop Listening</button>
+
+                    <div class="dynamic-prompts">
+                        <h3 id="try-asking-label">Quick Queries</h3>
+                        <div class="prompt-group">
+                            <div class="prompt-item" id="prompt-1"></div>
+                            <div class="prompt-item" id="prompt-2"></div>
+                            <div class="prompt-item" id="prompt-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="response-panel" id="response-section" style="display: none;">
+                    <div class="response-inner">
+                        <div class="resp-head"><i class="fas fa-sparkles"></i> <span id="response-title">Assistant Insights</span></div>
+                        <p id="response-text"></p>
+                        <button class="btn-action" id="new-query-btn"><i class="fas fa-plus"></i> <span id="new-query-text">New Request</span></button>
+                    </div>
                 </div>
             </div>
-            <div class="language-pill">
-                <button class="lang-btn active" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="hi">हिंदी</button>
+
+            <div class="loading-overlay" id="loading" style="display: none;">
+                <div class="dna-spinner"></div>
+                <p id="loading-text">Fetching data...</p>
             </div>
-        </header>
-
-        <main class="container">
-            <section class="interaction-card">
-                <div class="input-section">
-                    <div class="mic-container" id="mic-button">
-                        <div class="mic-circle">
-                            <i class="fas fa-microphone"></i>
-                        </div>
-                        <p id="mic-label">Tap & Speak</p>
-                    </div>
-                    <button id="pause-btn" class="pause-btn">⏸ Stop</button>
-
-                    <div class="guided-prompts">
-                        <h3 id="try-asking-label">Try asking:</h3>
-                     <div class="prompt-examples">
-                            <span class="prompt-item" id="prompt-1"></span>
-                            <span class="prompt-item" id="prompt-2"></span>
-                            <span class="prompt-item" id="prompt-3"></span>
-                            <span class="prompt-item" id="prompt-4"></span>
-                            <span class="prompt-item" id="prompt-5"></span>
-                    </div>
-
-                    </div>
-
-                    <div class="text-input-section" id="text-input-section" style="display: none;">
-                        <div class="input-header">
-                            <label id="input-label" for="user-input">How can we help you?</label>
-                        </div>
-                        <textarea id="user-input" rows="3" placeholder="Type your question here..."></textarea>
-                        <div class="action-buttons">
-                            <button class="btn btn-secondary" id="cancel-btn">
-                                <i class="fas fa-times"></i>
-                                <span id="cancel-text">Cancel</span>
-                            </button>
-                            <button class="btn btn-primary" id="submit-btn">
-                                <span id="submit-text">Ask Question</span>
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="response-section" id="response-section" style="display: none;">
-                    <div class="response-content">
-                        <div class="response-header">
-                            <div class="response-title-group">
-                                <i class="fas fa-comment-dots"></i>
-                                <h3 id="response-title">Response</h3>
-                            </div>
-                        </div>
-                        <div class="response-body">
-                            <div class="response-text-wrapper">
-                                <i class="fas fa-volume-up response-speaker-icon"></i>
-                                <p id="response-text"></p>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary-outline" id="new-query-btn">
-                            <i class="fas fa-redo"></i>
-                            <span id="new-query-text">Ask Another Question</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="loading-overlay" id="loading" style="display: none;">
-                    <div class="loader">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                    <p id="loading-text">Finding information...</p>
-                </div>
-            </section>
         </main>
-
-        <footer class="app-footer">
-            <p>&copy; 2025 AwaazSetu • Simple • Voice • Local</p>
-        </footer>
     </div>
-
+    <textarea id="user-input" style="display:none;"></textarea>
     <script src="app.js"></script>
 </body>
 </html>
