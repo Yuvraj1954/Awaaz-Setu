@@ -1,110 +1,109 @@
-:root {
-    --primary: #4f46e5;
-    --bg-dark: #020617;
-    --glass: rgba(255, 255, 255, 0.03);
-    --border: rgba(255, 255, 255, 0.1);
-    --text-main: #f8fafc;
+let currentLanguage = 'en';
+let recognition;
+let isListening = false;
+
+const translations = { 
+    en: { micLabel: 'Tap to Speak', listening: 'Listening...', status: 'Bridge Active', stopBtn: 'Stop Listening', askAnother: 'Ask Another', respHead: 'Assistant Response' }, 
+    hi: { micLabel: 'बोलने के लिए टैप करें', listening: 'सुन रहा हूँ...', status: 'ब्रिज सक्रिय है', stopBtn: 'सुनना बंद करें', askAnother: 'दूसरा पूछें', respHead: 'सहायक की प्रतिक्रिया' } 
+};
+
+function setUiState(listening) {
+    const icon = document.getElementById('mic-icon');
+    const wave = document.getElementById('waveform');
+    const container = document.getElementById('mic-container');
+    if (listening) { 
+        container.classList.add('pulse-active'); 
+    } else { 
+        container.classList.remove('pulse-active'); 
+    }
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; }
-.app-layout { display: flex; height: 100vh; }
-
-/* Sidebar Configuration */
-.sidebar { 
-    width: 260px; 
-    background: rgba(0,0,0,0.3); 
-    border-right: 1px solid var(--border); 
-    display: flex; 
-    flex-direction: column; 
-    padding: 1.5rem; 
-    backdrop-filter: blur(20px); 
+function updateUiLanguage() {
+    const t = translations[currentLanguage];
+    document.getElementById('mic-label').textContent = t.micLabel;
+    document.getElementById('status-text').textContent = t.status;
+    document.getElementById('pause-btn').textContent = t.stopBtn;
+    const askBtn = document.getElementById('new-query-btn');
+    if(askBtn) askBtn.textContent = t.askAnother;
 }
 
-.side-logo-container { text-align: center; padding: 1rem 0 2rem 0; font-size: 2.2rem; color: var(--primary); }
-
-.side-nav {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+async function refreshSidebar() {
+    try {
+        const res = await fetch('/api/history');
+        const history = await res.json();
+        const container = document.getElementById('history-list');
+        if (!container) return;
+        container.innerHTML = ""; 
+        history.slice(0, 5).forEach(item => {
+            const div = document.createElement('div'); 
+            div.style = "padding: 12px; font-size: 1rem; margin-top: 10px; cursor: pointer; color: #f8fafc; border-radius: 12px; background: rgba(255,255,255,0.08); width: 90%; text-align: center; font-weight: 500;";
+            div.textContent = item.text.length > 25 ? item.text.substring(0, 25) + "..." : item.text;
+            div.onclick = () => { document.getElementById('user-input').value = item.text; submitQuery(); };
+            container.appendChild(div);
+        });
+    } catch (e) { console.error(e); }
 }
 
-.nav-btn { 
-    width: 100%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: flex-start;
-    gap: 12px; 
-    padding: 12px 16px; 
-    margin-bottom: 10px; 
-    background: var(--glass); 
-    border: 1px solid var(--border); 
-    border-radius: 12px; 
-    color: #94a3b8; 
-    cursor: pointer; 
-    transition: 0.3s; 
-    font-weight: 600; 
+function speakResponse(text, lang) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    if (lang === 'hi') {
+        utterance.lang = 'hi-IN';
+        utterance.voice = voices.find(v => v.lang === 'hi-IN' && v.name.includes('Google')) || voices.find(v => v.lang === 'hi-IN');
+        utterance.rate = 1.0; 
+    } else {
+        utterance.lang = 'en-IN';
+        utterance.voice = voices.find(v => v.name.includes('Neural') && v.lang === 'en-IN') || voices.find(v => v.lang === 'en-IN' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-IN');
+        utterance.rate = 0.9; 
+    }
+    window.speechSynthesis.speak(utterance);
 }
 
-.nav-btn.active { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--primary); }
+window.onload = () => { 
+    refreshSidebar(); 
+    document.querySelectorAll('.lang-btn').forEach(btn => { 
+        btn.onclick = () => { 
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); 
+            btn.classList.add('active'); 
+            currentLanguage = btn.getAttribute('data-lang'); 
+            updateUiLanguage();
+        }; 
+    });
+};
 
-/* Recent Queries - Middle Aligned */
-.history-label { 
-    font-size: 0.85rem; 
-    font-weight: 800; 
-    color: var(--primary); 
-    letter-spacing: 0.15em; 
-    text-transform: uppercase; 
-    margin: 2.5rem 0 0.8rem 0; 
-    display: block; 
-    text-align: center;
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.onstart = () => { 
+        setUiState(true); 
+        document.getElementById('mic-label').textContent = translations[currentLanguage].listening; 
+    };
+    recognition.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; };
+    recognition.onend = () => { 
+        setUiState(false); 
+        document.getElementById('mic-label').textContent = translations[currentLanguage].micLabel; 
+        if (document.getElementById('user-input').value) submitQuery(); 
+    };
 }
 
-.history-container { 
-    flex: 1; 
-    overflow-y: auto; 
-    width: 100%; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center;
+async function submitQuery() {
+    const text = document.getElementById('user-input').value;
+    if (!text) return;
+    try {
+        const res = await fetch('/api/query', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, language: currentLanguage }) });
+        const data = await res.json();
+        const section = document.getElementById('response-section');
+        document.getElementById('response-text').textContent = data.response;
+        section.style.display = 'block';
+        speakResponse(data.response, currentLanguage);
+        refreshSidebar();
+    } catch (e) { console.error(e); setUiState(false); }
 }
 
-/* Interaction Card UI */
-.interaction-zone { flex: 1; display: flex; align-items: center; justify-content: center; }
-.interaction-card { width: 100%; max-width: 600px; padding: 2.5rem; text-align: center; background: var(--glass); border: 1px solid var(--border); border-radius: 32px; backdrop-filter: blur(40px); }
+document.getElementById('mic-button').onclick = () => { 
+    recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN'; 
+    isListening ? recognition.stop() : recognition.start(); 
+};
 
-.inner-circle { 
-    width: 100px; height: 100px; background: var(--primary); border-radius: 50%; 
-    display: flex; align-items: center; justify-content: center; font-size: 3rem; 
-    margin: 0 auto 15px auto; box-shadow: 0 0 40px rgba(79, 70, 229, 0.4); 
-    transition: 0.3s; overflow: hidden;
-}
-
-.inner-circle.pulse-active { box-shadow: 0 0 60px rgba(79, 70, 229, 0.8); background: linear-gradient(135deg, #4f46e5, #a855f7); }
-
-/* Waveform Flicker Fix */
-.waveform { display: none; align-items: center; justify-content: center; gap: 4px; height: 40px; visibility: hidden; }
-.pulse-active .waveform { display: flex !important; visibility: visible !important; }
-
-.bar { width: 4px; height: 15px; background: #ffffff; border-radius: 10px; animation: wave 1s ease-in-out infinite; opacity: 0; }
-.pulse-active .bar { opacity: 1; }
-
-@keyframes wave { 0%, 100% { height: 10px; } 50% { height: 35px; } }
-
-/* Response Box */
-.response-panel { 
-    margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; 
-    max-height: 250px; overflow-y: auto; scroll-behavior: smooth; padding-right: 5px;
-}
-
-#response-text { line-height: 1.6; font-size: 1.1rem; margin-bottom: 10px; text-align: center; }
-
-/* UI Extras */
-.status-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 14px; border-radius: 100px; font-size: 0.85rem; margin-top: 10px; }
-.pulse-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse-green 2s infinite; }
-@keyframes pulse-green { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-.lang-btn { background: var(--glass); border: 1px solid var(--border); color: #94a3b8; padding: 8px 18px; border-radius: 10px; cursor: pointer; margin-left: 8px; font-weight: 700; }
-.lang-btn.active { background: var(--primary); color: white; }
-.btn-action { background: var(--primary); color: white; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; }
-.stop-trigger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 10px 24px; border-radius: 100px; cursor: pointer; font-weight: 600; margin-top: 15px; }
+document.getElementById('history-btn').onclick = () => { window.location.href = 'history.html'; };
+document.getElementById('pause-btn').onclick = () => { window.speechSynthesis.cancel(); if (recognition) recognition.stop(); setUiState(false); };
