@@ -7,35 +7,30 @@ const translations = {
     hi: { micLabel: 'बोलने के लिए टैप करें', listening: 'सुन रहा हूँ...', status: 'ब्रिज सक्रिय है' }
 };
 
-// --- ROBUST VOICE ENGINE ---
+// --- VOICE OUTPUT (FIXED) ---
 function speakResponse(text) {
     if (!window.speechSynthesis) return;
-
-    // CRITICAL: Clear the queue to unblock the voice engine
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel(); // Clear queue to avoid getting stuck
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
-    
-    // Set natural speaking parameters
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
 
-    // Small delay ensures the hardware is ready after the cancel command
     setTimeout(() => {
         window.speechSynthesis.speak(utterance);
     }, 100);
 }
 
-// --- SIDEBAR HISTORY ---
+// --- HISTORY TRACKER ---
 function addToHistory(text) {
     const container = document.getElementById('history-list');
     if (!container) return;
     
     const item = document.createElement('div');
-    // Styling matches your existing sidebar
+    // Styling remains consistent with your sidebar items
     item.style = "background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; font-size: 0.8rem; margin-top: 10px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-weight: 600;";
-    item.textContent = text.length > 25 ? text.substring(0, 25) + "..." : text;
+    item.textContent = text.length > 20 ? text.substring(0, 20) + "..." : text;
     
     item.onclick = () => {
         document.getElementById('user-input').value = text;
@@ -63,29 +58,24 @@ if ('webkitSpeechRecognition' in window) {
     };
 }
 
-// --- BACKEND COMMUNICATION ---
+// --- API COMMUNICATION ---
 async function submitQuery() {
     const text = document.getElementById('user-input').value;
     if (!text) return;
-
     addToHistory(text);
 
     try {
         const res = await fetch('/api/query', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, language: currentLanguage })
+            body: JSON.stringify({ text: text, language: currentLanguage })
         });
         const data = await res.json();
         
-        // Update UI Response
-        const responseBox = document.getElementById('response-text');
-        if (responseBox) {
-            responseBox.textContent = data.response;
-            document.getElementById('response-section').style.display = 'block';
-        }
+        document.getElementById('response-text').textContent = data.response;
+        document.getElementById('response-section').style.display = 'block';
         
-        // Trigger the Fixed Voice Engine
+        // Assistant speaks back
         speakResponse(data.response);
     } catch (e) {
         console.error("API Error:", e);
