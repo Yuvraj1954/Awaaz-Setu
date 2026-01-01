@@ -21,44 +21,64 @@ try:
 except Exception as e:
     print(f"DB Error: {e}")
 
+# --- ENHANCED KNOWLEDGE BASE ---
 KNOWLEDGE = {
     "greetings": {
-        "en": "Hello! I am AwaazSetu, your government assistant. I can help with health schemes, ration cards, and emergency services.",
-        "hi": "नमस्ते! मैं आवाज़सेतु हूँ। मैं स्वास्थ्य, राशन और आपातकालीन सेवाओं की जानकारी में आपकी मदद कर सकता हूँ।"
+        "en": "Namaste! I am AwaazSetu, your digital bridge to government services. I am here to guide you through Health Schemes, Ration Cards, Farmer Benefits (PM Kisan), and Emergency Services. How may I serve you today?",
+        "hi": "नमस्ते! मैं आवाज़सेतु हूँ - सरकारी सेवाओं के लिए आपका डिजिटल सहायक। मैं आयुष्मान भारत, राशन कार्ड, किसान सम्मान निधि और आपातकालीन सेवाओं के बारे में विस्तृत जानकारी दे सकता हूँ। बताइए, आज मैं आपकी कैसे सहायता करूँ?"
     },
     "help": {
-        "en": "I can assist with: 1. Ayushman Bharat details, 2. Ration Card application, 3. PM Kisan status, and 4. Emergency contacts.",
-        "hi": "मैं मदद कर सकता हूँ: 1. आयुष्मान भारत, 2. राशन कार्ड प्रक्रिया, 3. पीएम किसान स्थिति, और 4. आपातकालीन नंबर।"
+        "en": "I can assist you with the following:\n1. **Ayushman Bharat**: Health coverage of ₹5 Lakhs.\n2. **Ration Card**: Application process and documents.\n3. **PM Kisan**: ₹6,000/year farmer benefits and status.\n4. **Emergency**: Instant access to Police (100) & Ambulance (108).\n\nTry asking: 'How do I apply for a Ration Card?'",
+        "hi": "मैं निम्नलिखित में आपकी सहायता कर सकता हूँ:\n1. **आयुष्मान भारत**: ₹5 लाख का स्वास्थ्य बीमा।\n2. **राशन कार्ड**: आवेदन प्रक्रिया और दस्तावेज।\n3. **पीएम किसान**: ₹6,000/वर्ष की किसान सहायता।\n4. **आपातकाल**: पुलिस (100) और एम्बुलेंस (108)।\n\nपूछ कर देखें: 'राशन कार्ड कैसे बनवाएं?'"
     },
     "ayushman": {
-        "en": "Ayushman Bharat (PM-JAY) offers ₹5 Lakhs free health cover per family per year. Apply at any PMJAY hospital with your Aadhaar.",
-        "hi": "आयुष्मान भारत योजना परिवारों के लिए प्रति वर्ष ₹5 लाख का मुफ्त स्वास्थ्य कवर देती है। अपने आधार और राशन कार्ड के साथ आवेदन करें।"
+        "en": "Under **Ayushman Bharat (PM-JAY)**, your family is entitled to **₹5 Lakhs of free health coverage annually**. You can receive cashless treatment at any empanelled public or private hospital. To apply, visit your nearest Common Service Centre (CSC) or government hospital with your **Aadhaar Card and Ration Card**. You can also generate your ABHA Health ID at healthid.ndhm.gov.in.",
+        "hi": "आयुष्मान भारत (PM-JAY) के तहत आपके परिवार को **प्रति वर्ष ₹5 लाख का मुफ्त स्वास्थ्य बीमा** मिलता है। आप किसी भी सूचीबद्ध सरकारी या निजी अस्पताल में कैशलेस इलाज करा सकते हैं। आवेदन के लिए अपने **आधार और राशन कार्ड** के साथ नजदीकी जन सेवा केंद्र (CSC) या सरकारी अस्पताल जाएं। आप healthid.ndhm.gov.in पर अपनी हेल्थ आईडी भी बना सकते हैं।"
     },
     "ration": {
-        "en": "For a Ration Card, visit your local Food & Supplies office. Documents required: Aadhaar, Residence proof, and Income certificate.",
-        "hi": "राशन कार्ड के लिए स्थानीय खाद्य कार्यालय जाएं। आवश्यक दस्तावेज: आधार, निवास प्रमाण और आय प्रमाण पत्र।"
+        "en": "To apply for a **Ration Card**, visit your local Food & Civil Supplies Department office or the nearest Seva Kendra. \n**Required Documents:**\n1. Aadhaar Cards of all family members\n2. Proof of Residence (Electricity/Water Bill)\n3. Income Certificate\n4. Passport-sized photographs.\nThis card ensures subsidized food grains under the NFSA.",
+        "hi": "नए **राशन कार्ड** के लिए अपने स्थानीय खाद्य एवं आपूर्ति विभाग या सेवा केंद्र पर जाएं।\n**आवश्यक दस्तावेज:**\n1. परिवार के सभी सदस्यों का आधार कार्ड\n2. निवास प्रमाण पत्र (बिजली/पानी का बिल)\n3. आय प्रमाण पत्र\n4. पासपोर्ट फोटो।\nयह कार्ड आपको सरकारी दर पर अनाज सुनिश्चित करता है।"
+    },
+    "pmkisan": {
+        "en": "The **PM Kisan Samman Nidhi Yojana** provides **₹6,000 per year** to eligible farmer families, paid in three installments of ₹2,000 directly into your bank account. To register or check your beneficiary status, visit **pmkisan.gov.in** or contact the PM-Kisan Helpline at **155261**.",
+        "hi": "**पीएम किसान सम्मान निधि योजना** पात्र किसानों को **₹6,000 प्रति वर्ष** की सहायता देती है, जो ₹2,000 की तीन किस्तों में सीधे बैंक खाते में आती है। पंजीकरण करने या भुगतान की स्थिति (Status) देखने के लिए **pmkisan.gov.in** पर जाएं या पीएम-किसान हेल्पलाइन **155261** पर कॉल करें।"
     },
     "emergency": {
-        "en": "Emergency numbers: Dial 112 (All-in-one), 100 (Police), 108 (Ambulance), or 101 (Fire). Help is available 24/7.",
-        "hi": "आपातकालीन नंबर: 112 (सभी के लिए), 100 (पुलिस), 108 (एम्बुलेंस), या 101 (दमकल)।"
+        "en": "In case of emergency, help is available 24/7. Dial these numbers immediately:\n* **112**: All-in-One Emergency Helpline\n* **100**: Police Control Room\n* **108**: Ambulance / Medical Emergency\n* **101**: Fire Brigade\nYour safety is our priority.",
+        "hi": "आपातकालीन स्थिति में सहायता 24/7 उपलब्ध है। तुरंत इन नंबरों पर कॉल करें:\n* **112**: आपातकालीन हेल्पलाइन (सभी के लिए)\n* **100**: पुलिस\n* **108**: एम्बुलेंस / चिकित्सा सेवा\n* **101**: दमकल (Fire Brigade)\nआपकी सुरक्षा हमारी प्राथमिकता है।"
     }
 }
 
 FALLBACKS = {
-    "en": ["I'm not sure about that. Try asking about Ayushman Bharat or Ration Cards.", "Try asking for 'Help'."],
-    "hi": ["मुझे इसके बारे में पता नहीं है। आयुष्मान भारत या राशन कार्ड के बारे में पूछें।", "सेवाओं की सूची के लिए 'मदद' कहें।"]
+    "en": ["I am not sure about that specific query. Please try asking about 'Ayushman Bharat', 'Ration Card', or 'PM Kisan'.", "I can help with Government Schemes. Try asking 'Help' to see options."],
+    "hi": ["क्षमा करें, मुझे इसके बारे में जानकारी नहीं है। कृपया 'आयुष्मान भारत', 'राशन कार्ड' या 'पीएम किसान' के बारे में पूछें।", "मैं सरकारी योजनाओं में मदद कर सकता हूँ। विकल्प देखने के लिए 'मदद' कहें।"]
 }
 
+# --- SMARTER INTENT DETECTION ---
 def get_intent(text):
     t = text.lower()
-    if any(x in t for x in ["hi", "hello", "नमस्ते", "हेलो"]): return "greetings"
-    if any(x in t for x in ["help", "मदद", "सहायता"]): return "help"
-    if any(x in t for x in ["ayushman", "bharat", "आयुष्मान"]): return "ayushman"
-    if any(x in t for x in ["ration", "राशन"]): return "ration"
-    if any(x in t for x in ["emergency", "police", "आपातकाल"]): return "emergency"
+    
+    # 1. Greetings
+    if any(x in t for x in ["hi", "hello", "namaste", "नमस्ते", "हेलो"]): return "greetings"
+    
+    # 2. PM Kisan / Farmer Info (Catches "farmer", "benefits", "kisan")
+    if any(x in t for x in ["pm kisan", "farmer", "kisan", "benefits", "पीएम किसान", "किसान", "फायदे", "benefit"]): return "pmkisan"
+    
+    # 3. Ayushman / Health / Hospitals (Catches "hospital", "health id")
+    if any(x in t for x in ["ayushman", "health", "hospital", "doctor", "आयुष्मान", "स्वास्थ्य", "अस्पताल", "हेल्थ", "id"]): return "ayushman"
+    
+    # 4. Ration / Apply Card (Catches "apply", "card", "ration")
+    if any(x in t for x in ["ration", "food", "apply", "card", "राशन", "कार्ड", "आवेदन", "grain"]): return "ration"
+    
+    # 5. Emergency (Catches "100", "108", "police")
+    if any(x in t for x in ["emergency", "police", "ambulance", "100", "108", "fire", "112", "आपातकाल", "पुलिस", "एम्बुलेंस"]): return "emergency"
+    
+    # 6. Help / Status / Contact (Catches generic help terms)
+    if any(x in t for x in ["help", "contact", "status", "info", "support", "मदद", "संपर्क", "स्थिति", "जानकारी"]): return "help"
+    
     return "default"
 
-# Serve HTML Files
+# --- ROUTES ---
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
@@ -67,7 +87,6 @@ def index():
 def history_page():
     return app.send_static_file('history.html')
 
-# API Endpoints
 @app.route("/api/query", methods=["POST"])
 def handle_query():
     data = request.json
@@ -75,7 +94,10 @@ def handle_query():
     lang = data.get("language", "en")
     intent = get_intent(user_text)
     
-    response = KNOWLEDGE[intent][lang] if intent != "default" else random.choice(FALLBACKS[lang])
+    if intent != "default":
+        response = KNOWLEDGE[intent][lang]
+    else:
+        response = random.choice(FALLBACKS[lang])
         
     logs_collection.insert_one({
         "text": user_text, 
@@ -88,7 +110,7 @@ def handle_query():
 @app.route("/api/history", methods=["GET"])
 def get_history():
     try:
-        # Fetches ALL logs (pagination handled by JS)
+        # Fetch ALL logs sorted by newest first
         history = list(logs_collection.find().sort("timestamp", -1))
         
         for item in history:
