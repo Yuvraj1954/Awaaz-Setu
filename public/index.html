@@ -14,7 +14,7 @@
             <div class="side-logo-container"><i class="fas fa-satellite-dish"></i></div>
             <nav class="side-nav">
                 <button class="nav-btn active" onclick="window.location.reload()"><i class="fas fa-home"></i> <span>Home</span></button>
-                <button class="nav-btn" id="history-btn"><i class= "fas fa-history"></i> <span>History</span></button>
+                <button class="nav-btn" id="history-btn"><i class="fas fa-history"></i> <span>History</span></button>
             </nav>
             <div class="history-label">RECENT QUERIES</div>
             <div id="history-list" class="history-container"></div>
@@ -38,7 +38,16 @@
             <div class="interaction-zone">
                 <div class="interaction-card">
                     <div class="mic-portal" id="mic-button">
-                        <div class="inner-circle"><i class="fas fa-microphone"></i></div>
+                        <div class="inner-circle" id="mic-container">
+                            <i class="fas fa-microphone" id="mic-icon"></i>
+                            <div class="waveform" id="waveform" style="display: none;">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+                        </div>
                         <h2 id="mic-label">Tap to Speak</h2>
                     </div>
                     <button id="pause-btn" class="stop-trigger">Stop Listening</button>
