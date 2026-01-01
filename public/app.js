@@ -2,7 +2,7 @@ let currentLanguage = 'en';
 let recognition;
 let isListening = false;
 let currentPage = 1;
-const itemsPerPage = 10; // FIXED: Shows 10 logs per page in History
+const itemsPerPage = 10; 
 
 const UI_TEXT = {
     en: { 
@@ -22,7 +22,7 @@ const PROMPTS = {
     hi: ["नमस्ते", "मदद", "आयुष्मान भारत", "राशन कार्ड", "पीएम किसान", "अस्पताल", "पुलिस १००", "एम्बुलेंस १०८", "आवेदन", "फायदे", "किसान सूचना", "आपातकाल", "हेल्थ कार्ड", "संपर्क", "स्थिति"]
 };
 
-// --- 1. SPEECH RECOGNITION (MIC & STOP FIX) ---
+// --- 1. SPEECH RECOGNITION ---
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
@@ -30,12 +30,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     recognition.interimResults = false;
 
     recognition.onstart = () => { 
-        isListening = true;
-        const micContainer = document.getElementById('mic-container');
-        if (micContainer) micContainer.classList.add('pulse-active');
-        
-        const micLabel = document.getElementById('mic-label');
-        if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].listening;
+        setListeningState(true);
     };
 
     recognition.onresult = (event) => {
@@ -46,18 +41,40 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onerror = (event) => {
         console.error("Mic Error:", event.error);
-        stopMicUI(); 
+        setListeningState(false);
     };
 
     recognition.onend = () => { 
-        isListening = false;
-        stopMicUI();
+        setListeningState(false);
         const userInput = document.getElementById('user-input');
-        // Only submit if we actually got text and wasn't manually stopped with empty input
+        // Only submit if text exists
         if (userInput && userInput.value.trim() !== "") {
             submitQuery(); 
         }
     };
+}
+
+// FIXED: Centralized UI State Management for Buttons
+function setListeningState(active) {
+    isListening = active;
+    const micContainer = document.getElementById('mic-button');
+    const stopBtn = document.getElementById('pause-btn');
+    const micLabel = document.getElementById('mic-label');
+    const innerCircle = document.querySelector('.inner-circle');
+
+    if (active) {
+        // Show Stop Button, Hide/Animate Mic
+        if (innerCircle) innerCircle.style.background = "#ec4899"; // Pink pulse color
+        if (micContainer) micContainer.classList.add('pulse-active');
+        if (stopBtn) stopBtn.style.display = 'inline-block'; // FORCE SHOW STOP BUTTON
+        if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].listening;
+    } else {
+        // Reset UI
+        if (innerCircle) innerCircle.style.background = "var(--primary)";
+        if (micContainer) micContainer.classList.remove('pulse-active');
+        if (stopBtn) stopBtn.style.display = 'none'; // FORCE HIDE STOP BUTTON
+        if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].tap;
+    }
 }
 
 function startMic() {
@@ -68,24 +85,15 @@ function startMic() {
     }
 }
 
-// FIXED: Stop Listening Button Logic
+// FIXED: Stop Button Logic
 function stopMic() {
     if (recognition) {
-        recognition.stop(); // Stops recording
+        recognition.stop(); // Stops recording & triggers onend (which submits query)
     }
-    stopMicUI(); // Immediately resets UI
+    setListeningState(false); // Immediate UI reset
 }
 
-function stopMicUI() {
-    isListening = false;
-    const micContainer = document.getElementById('mic-container');
-    if (micContainer) micContainer.classList.remove('pulse-active');
-    
-    const micLabel = document.getElementById('mic-label');
-    if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].tap;
-}
-
-// --- 2. ACTIVITY LOGS (FIXED: SHOWS 10 ITEMS) ---
+// --- 2. ACTIVITY LOGS ---
 async function fetchHistoryLogs() {
     const tbody = document.getElementById('history-body');
     if (!tbody) return; 
@@ -94,7 +102,7 @@ async function fetchHistoryLogs() {
         const res = await fetch('/api/history');
         const allData = await res.json();
         
-        // FIX: Slices 10 items based on itemsPerPage (10)
+        // PAGINATION LOGIC
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         const paginatedData = allData.slice(start, end);
@@ -111,7 +119,7 @@ async function fetchHistoryLogs() {
             `).join('');
         }
         
-        // Update Pagination Controls
+        // Update Buttons
         document.getElementById('page-num').textContent = `Page ${currentPage}`;
         document.getElementById('prev-btn').disabled = currentPage === 1;
         document.getElementById('next-btn').disabled = end >= allData.length;
@@ -119,7 +127,7 @@ async function fetchHistoryLogs() {
     } catch (e) { console.error("History fetch failed:", e); }
 }
 
-// --- 3. SIDEBAR RECENT QUERIES (FIXED: LIMIT 5) ---
+// --- 3. SIDEBAR RECENT QUERIES ---
 async function refreshRecentQueries() {
     try {
         const res = await fetch('/api/history');
@@ -127,16 +135,17 @@ async function refreshRecentQueries() {
         const container = document.getElementById('history-list');
         if (!container) return;
         
-        // FIX: Sidebar is strictly limited to 5
+        // LIMIT TO TOP 5 FOR SIDEBAR
         container.innerHTML = data.slice(0, 5).map(item => `
-            <div class="history-item" onclick="document.getElementById('user-input').value='${item.text}'; submitQuery();">
+            <div class="history-item" onclick="document.getElementById('user-input').value='${item.text}'; submitQuery();" 
+                 style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; cursor:pointer; font-size:0.8rem; color:#cbd5e1; width:100%;">
                 ${item.text.length > 20 ? item.text.substring(0, 20) + '...' : item.text}
             </div>
         `).join('');
     } catch (e) { console.error("Sidebar update failed", e); }
 }
 
-// --- 4. UI & LANGUAGE TOGGLE ---
+// --- 4. UI & LANGUAGE ---
 function updateFullUI() {
     const t = UI_TEXT[currentLanguage];
     const elements = {
@@ -159,6 +168,11 @@ function renderGrid() {
         const chip = document.createElement('div');
         chip.className = "suggest-chip";
         chip.textContent = text;
+        chip.style.cssText = "background:rgba(255,255,255,0.05); padding:8px 15px; border-radius:20px; font-size:0.9rem; cursor:pointer; border:1px solid transparent; transition:0.3s;";
+        
+        chip.onmouseover = function() { this.style.borderColor = "#4f46e5"; this.style.background = "rgba(79,70,229,0.1)"; };
+        chip.onmouseout = function() { this.style.borderColor = "transparent"; this.style.background = "rgba(255,255,255,0.05)"; };
+        
         chip.onclick = () => { 
             const input = document.getElementById('user-input');
             if (input) input.value = text; 
@@ -199,9 +213,8 @@ async function submitQuery() {
     } catch (e) { console.error("Query failed", e); }
 }
 
-// --- 6. CLEAR HISTORY ---
 window.clearLogs = async function() {
-    if (!confirm("Clear all logs? This cannot be undone.")) return;
+    if (!confirm("Clear all logs?")) return;
     try {
         const res = await fetch('/api/clear', { method: 'POST' });
         const result = await res.json();
@@ -209,17 +222,15 @@ window.clearLogs = async function() {
     } catch (e) { console.error("Clear error:", e); }
 };
 
-// --- 7. INITIALIZATION ---
+// --- INITIALIZATION ---
 window.onload = () => {
     updateFullUI();
     refreshRecentQueries();
     
-    // History Page Logic
     if (document.getElementById('history-body')) {
         fetchHistoryLogs();
     }
 
-    // Language Toggle
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -229,15 +240,12 @@ window.onload = () => {
         };
     });
 
-    // Mic Button Listener
     const micBtn = document.getElementById('mic-button');
     if (micBtn) micBtn.onclick = startMic;
 
-    // Stop Button Listener (FIXED)
     const pauseBtn = document.getElementById('pause-btn');
     if (pauseBtn) pauseBtn.onclick = stopMic;
 
-    // Pagination Listeners
     if (document.getElementById('prev-btn')) {
         document.getElementById('prev-btn').onclick = () => { 
             if (currentPage > 1) { currentPage--; fetchHistoryLogs(); } 
