@@ -56,16 +56,16 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark);
 
 .nav-btn.active { background: rgba(255,255,255,0.1); color: #fff; border-color: var(--primary); }
 
-/* Recent Queries - Middle Aligned */
+/* Update your existing history-label for better visibility */
 .history-label { 
-    font-size: 0.7rem; 
+    font-size: 0.85rem; /* Slightly larger */
     font-weight: 800; 
-    color: #64748b; 
+    color: var(--primary); /* Use primary color to make it pop */
     letter-spacing: 0.15em; 
     text-transform: uppercase; 
-    margin: 2.5rem 0 0.5rem 0; 
+    margin: 2.5rem 0 0.8rem 0; 
     display: block; 
-    text-align: center; /* Centered Label */
+    text-align: center;
 }
 
 .history-container { 
