@@ -5,12 +5,13 @@ from datetime import datetime
 import os
 import random
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 # MongoDB Connection
 MONGO_URI = os.environ.get("MONGO_URI")
 if not MONGO_URI:
+    # WARNING: Use environment variables in production!
     MONGO_URI = "mongodb+srv://yuvrajk863888_db_user:aMnHBizntIPta5VX@cluster0.x4euc3w.mongodb.net/awaaz_setu_db?retryWrites=true&w=majority&appName=Cluster0"
 
 try:
@@ -22,15 +23,15 @@ except Exception as e:
 
 KNOWLEDGE = {
     "greetings": {
-        "en": "Hello! I am AwaazSetu, your government assistant. I can help with health schemes, ration cards, and emergency services. How can I assist you?",
-        "hi": "नमस्ते! मैं आवाज़सेतु हूँ। मैं स्वास्थ्य, राशन और आपातकालीन सेवाओं की जानकारी में आपकी मदद कर सकता हूँ।"
+        "en": "Hello! I am AwaazSetu, your government assistant. I can help with health schemes, ration cards, and emergency services.",
+        "hi": "नमस्ते! मैं आवाज़सेतु हूँ। मैं स्वास्थ्य, राशन और आपातकालीन सेवाओं की जानकारी में आपकी मदद कर सकता हूँ।"
     },
     "help": {
         "en": "I can assist with: 1. Ayushman Bharat details, 2. Ration Card application, 3. PM Kisan status, and 4. Emergency contacts.",
         "hi": "मैं मदद कर सकता हूँ: 1. आयुष्मान भारत, 2. राशन कार्ड प्रक्रिया, 3. पीएम किसान स्थिति, और 4. आपातकालीन नंबर।"
     },
     "ayushman": {
-        "en": "Ayushman Bharat (PM-JAY) offers ₹5 Lakhs free health cover per family per year. Apply at any PMJAY hospital with your Aadhaar and Ration Card.",
+        "en": "Ayushman Bharat (PM-JAY) offers ₹5 Lakhs free health cover per family per year. Apply at any PMJAY hospital with your Aadhaar.",
         "hi": "आयुष्मान भारत योजना परिवारों के लिए प्रति वर्ष ₹5 लाख का मुफ्त स्वास्थ्य कवर देती है। अपने आधार और राशन कार्ड के साथ आवेदन करें।"
     },
     "ration": {
@@ -44,7 +45,7 @@ KNOWLEDGE = {
 }
 
 FALLBACKS = {
-    "en": ["I'm not sure about that. Try asking about Ayushman Bharat or Ration Cards.", "Try asking for 'Help' to see what I can do."],
+    "en": ["I'm not sure about that. Try asking about Ayushman Bharat or Ration Cards.", "Try asking for 'Help'."],
     "hi": ["मुझे इसके बारे में पता नहीं है। आयुष्मान भारत या राशन कार्ड के बारे में पूछें।", "सेवाओं की सूची के लिए 'मदद' कहें।"]
 }
 
@@ -57,25 +58,46 @@ def get_intent(text):
     if any(x in t for x in ["emergency", "police", "आपातकाल"]): return "emergency"
     return "default"
 
+# Serve HTML Files
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+@app.route('/history.html')
+def history_page():
+    return app.send_static_file('history.html')
+
+# API Endpoints
 @app.route("/api/query", methods=["POST"])
 def handle_query():
     data = request.json
     user_text = data.get("text", "")
     lang = data.get("language", "en")
     intent = get_intent(user_text)
+    
     response = KNOWLEDGE[intent][lang] if intent != "default" else random.choice(FALLBACKS[lang])
-    logs_collection.insert_one({"text": user_text, "response": response, "language": lang, "timestamp": datetime.utcnow()})
+        
+    logs_collection.insert_one({
+        "text": user_text, 
+        "response": response, 
+        "language": lang, 
+        "timestamp": datetime.utcnow()
+    })
     return jsonify({"response": response})
 
 @app.route("/api/history", methods=["GET"])
 def get_history():
     try:
-        history = list(logs_collection.find().sort("timestamp", -1).limit(5))
+        # FIXED: Removed .limit(5). Now fetches ALL logs so pagination works.
+        history = list(logs_collection.find().sort("timestamp", -1))
+        
         for item in history:
             item["_id"] = str(item["_id"])
             item["time"] = item["timestamp"].strftime("%H:%M")
+            
         return jsonify(history)
-    except:
+    except Exception as e:
+        print(f"History Error: {e}")
         return jsonify([])
 
 @app.route("/api/clear", methods=["POST"])
@@ -86,4 +108,5 @@ def clear_history():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-app = app
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
