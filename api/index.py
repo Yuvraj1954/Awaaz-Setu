@@ -33,16 +33,36 @@ SMART_RESPONSES = {
     }
 }
 
-def detect_intent(text):
+def detect_intent(text, service, language):
     t = text.lower().strip()
-    # Robust Clustering
-    if any(x in t for x in ["hi", "hello", "namaste", "नमस्ते", "हेल्लो"]): return "greeting"
-    if any(x in t for x in ["emergency", "police", "112", "108", "accident", "help", "पुलिस", "आपात", "बचाओ"]): return "emergency"
-    if any(x in t for x in ["pregnant", "delivery", "baby", "maternity", "गर्भवती", "प्रसव", "बच्चा"]): return "maternity"
-    if any(x in t for x in ["ayushman", "health card", "5 lakh", "free treatment", "आयुष्मान", "कार्ड"]): return "ayushman"
-    if any(x in t for x in ["ration", "quota", "food card", "wheat", "rice", "राशन", "कोटा"]): return "ration"
-    return "default"
 
+    # Emergency Cluster
+    if any(x in t for x in ["emergency", "police", "112", "accident", "fire", "safety", "help", "आपात", "पुलिस", "खतरा"]):
+        return "emergency_numbers"
+
+    # Healthcare Cluster
+    if any(x in t for x in ["hospital", "doctor", "clinic", "medical", "sick", "अस्पताल", "डॉक्टर", "तबीयत"]):
+        return "hospital_near_me"
+    
+    if any(x in t for x in ["pregnancy", "baby", "delivery", "maternity", "गर्भवती", "प्रसव"]):
+        return "pregnancy"
+
+    # Government Schemes Cluster
+    if any(x in t for x in ["ration", "quota", "food card", "wheat", "राशन", "कोटा"]):
+        return "ration_card"
+    
+    if any(x in t for x in ["ayushman", "golden card", "5 lakh", "health card", "आयुष्मान"]):
+        return "ayushman_bharat"
+
+    if any(x in t for x in ["pension", "60 years", "old age", "पेंशन"]):
+        return "pension"
+
+    # Greeting
+    if any(x in t for x in ["hi", "hello", "namaste", "नमस्ते"]):
+        return "greeting"
+
+    return "default"
+    
 @app.route("/api/query", methods=["POST"])
 def process_query():
     data = request.json
