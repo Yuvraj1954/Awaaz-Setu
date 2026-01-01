@@ -6,7 +6,7 @@
 [![Database](https://img.shields.io/badge/Database-MongoDB_Atlas-green?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Frontend](https://img.shields.io/badge/Frontend-Vanilla_JS_Elite-blue?style=for-the-badge&logo=javascript&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-> **📥 [Download the Official Command Guide (PDF)](static/docs/Command_Guide.pdf)**
+> **📥 [Download the Official Command Guide (PDF)](static/docs/command_Guide.pdf)**
 
 ---
 
