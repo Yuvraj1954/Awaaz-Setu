@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AwaazSetu | Elite Voice Bridge</title>
+    <title>AwaazSetu | Home</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-layout">
         <aside class="sidebar">
             <div class="side-logo-container"><i class="fas fa-satellite-dish"></i></div>
             <nav class="side-nav">
-                <button class="nav-btn active" onclick="window.location.reload()">
-                    <i class="fas fa-home"></i> <span id="nav-home">Home</span>
-                </button>
-                <button class="nav-btn" onclick="window.location.href='history.html'">
-                    <i class="fas fa-history"></i> <span id="nav-hist">History</span>
-                </button>
+                <button class="nav-btn active"><i class="fas fa-home"></i> <span id="nav-home">Home</span></button>
+                <button class="nav-btn" onclick="window.location.href='history.html'"><i class="fas fa-history"></i> <span id="nav-hist">History</span></button>
             </nav>
             <div class="history-label" id="side-recent">RECENT QUERIES</div>
             <div id="history-list" class="history-container"></div>
@@ -27,11 +22,8 @@
         <main class="main-content">
             <header class="top-bar">
                 <div class="brand-container">
-                    <h1 class="glow-text"><i class="fas fa-satellite-dish"></i> AwaazSetu</h1>
-                    <div class="status-pill">
-                        <span class="pulse-dot"></span> 
-                        <span id="status-text">Bridge Active</span>
-                    </div>
+                    <i class="fas fa-satellite-dish" style="color:var(--primary); font-size:2rem;"></i>
+                    <h1 class="glow-text">AwaazSetu</h1>
                 </div>
                 <div class="language-pill">
                     <button class="lang-btn active" data-lang="en">EN</button>
