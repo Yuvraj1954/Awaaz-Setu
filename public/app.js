@@ -2,65 +2,95 @@ let currentLanguage = 'en';
 let recognition;
 let isListening = false;
 
-// History Logic
+const translations = {
+    en: { title: 'AwaazSetu', micLabel: 'Ready to Listen', listening: 'Listening...', insights: 'Assistant Insights' },
+    hi: { title: 'आवाज़सेतु', micLabel: 'सुनने के लिए तैयार', listening: 'सुन रहा हूँ...', insights: 'सहायक अंतर्दृष्टि' }
+};
+
+// --- LANGUAGE SWITCHER ---
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLanguage = btn.dataset.lang;
+        
+        // Update Text
+        document.getElementById('app-title').textContent = translations[currentLanguage].title;
+        document.getElementById('mic-label').textContent = translations[currentLanguage].micLabel;
+        
+        if (recognition) {
+            recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
+        }
+    });
+});
+
+// --- SPEECH ENGINE ---
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.onstart = () => { 
+        isListening = true; 
+        document.getElementById('mic-label').textContent = translations[currentLanguage].listening;
+        document.querySelector('.inner-circle').style.background = '#10b981';
+    };
+    recognition.onresult = (e) => { 
+        document.getElementById('user-input').value = e.results[0][0].transcript; 
+    };
+    recognition.onend = () => { 
+        isListening = false; 
+        document.querySelector('.inner-circle').style.background = '#4f46e5';
+        document.getElementById('mic-label').textContent = translations[currentLanguage].micLabel;
+        if (document.getElementById('user-input').value) submitQuery();
+    };
+}
+
+// --- SUBMIT LOGIC ---
+async function submitQuery() {
+    const text = document.getElementById('user-input').value;
+    if (!text) return;
+
+    document.getElementById('loading').style.display = 'flex';
+    addToHistory(text);
+
+    try {
+        const res = await fetch('/api/query', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, language: currentLanguage })
+        });
+        const data = await res.json();
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('response-text').textContent = data.response;
+        document.getElementById('response-section').style.display = 'block';
+        
+        speakText(data.response, currentLanguage);
+    } catch (e) {
+        document.getElementById('loading').style.display = 'none';
+    }
+}
+
+function speakText(text, lang) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';
+    window.speechSynthesis.speak(u);
+}
+
 function addToHistory(text) {
     const container = document.getElementById('history-list');
-    if (!container) return;
     const item = document.createElement('div');
-    item.style = "background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-top: 12px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);";
-    item.textContent = text.length > 20 ? text.substring(0, 20) + "..." : text;
+    item.className = 'history-item';
+    item.textContent = text.length > 30 ? text.substring(0, 30) + "..." : text;
     item.onclick = () => { document.getElementById('user-input').value = text; submitQuery(); };
     container.prepend(item);
 }
 
-if ('webkitSpeechRecognition' in window) {
-    recognition = new webkitSpeechRecognition();
-    recognition.onstart = () => { isListening = true; document.querySelector('.inner-circle').style.transform = 'scale(1.2)'; };
-    recognition.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; };
-    recognition.onend = () => { isListening = false; document.querySelector('.inner-circle').style.transform = 'scale(1)'; if (document.getElementById('user-input').value) submitQuery(); };
-}
-
-async function submitQuery() {
-    const text = document.getElementById('user-input').value;
-    if (!text) return;
-    document.getElementById('loading').style.display = 'flex';
-    addToHistory(text);
-
-    const res = await fetch('/api/query', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: currentLanguage })
-    });
-    const data = await res.json();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('response-text').textContent = data.response;
-    document.getElementById('response-section').style.display = 'block';
-    
-    // Auto Speech
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(data.response);
-    u.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
-    window.speechSynthesis.speak(u);
-}
-
-document.getElementById('mic-button').addEventListener('click', () => {
-    if (!recognition) return alert('Please use Chrome for voice input.');
-    
-    // Reset paused state and set correct language
-    paused = false;
+document.getElementById('mic-button').onclick = () => {
     recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
-    
-    if (isListening) {
-        recognition.stop();
-    } else {
-        // Clear previous input before starting new listen
-        document.getElementById('user-input').value = '';
-        recognition.start();
-    }
-});
+    isListening ? recognition.stop() : recognition.start();
+};
 
-document.querySelectorAll('.lang-btn').forEach(b => b.onclick = () => {
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    b.classList.add('active');
-    currentLanguage = b.dataset.lang;
-});
+document.getElementById('pause-btn').onclick = () => {
+    if (recognition) recognition.stop();
+    window.speechSynthesis.cancel();
+};
