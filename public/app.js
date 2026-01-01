@@ -1,9 +1,8 @@
 let currentLanguage = 'en';
 let recognition;
 let currentPage = 1;
-const itemsPerPage = 7;
+const itemsPerPage = 8;
 
-// UI Text Dictionary for Full Translation
 const UI_TEXT = {
     en: { 
         home: "Home", history: "History", recent: "RECENT QUERIES", 
@@ -13,7 +12,7 @@ const UI_TEXT = {
     hi: { 
         home: "मुख्य", history: "इतिहास", recent: "हाल के प्रश्न", 
         status: "ब्रिज सक्रिय है", tap: "बोलने के लिए टैप करें", stop: "सुनना बंद करें", 
-        try: "पूछ कर देखें", listening: "सुन रहा हूँ...", clear: "इतिहास साफ़ करें" 
+        try: "पूछ कर देखें", listening: "सुन रहा हूँ...", clear: "इतिहास साफ़ करें" 
     }
 };
 
@@ -22,29 +21,61 @@ const PROMPTS = {
     hi: ["नमस्ते", "मदद", "आयुष्मान भारत", "राशन कार्ड", "पीएम किसान", "अस्पताल", "पुलिस १००", "एम्बुलेंस १०८", "आवेदन", "फायदे", "किसान सूचना", "आपातकाल", "हेल्थ कार्ड", "संपर्क", "स्थिति"]
 };
 
-// --- VOICE SYNTHESIS ---
-function speakResponse(text) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
-    utterance.rate = 1.0;
-    window.speechSynthesis.speak(utterance);
+// --- MIC & SPEECH RECOGNITION LOGIC ---
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => { 
+        // Triggers the CSS pulse animation
+        const micContainer = document.getElementById('mic-container');
+        if (micContainer) micContainer.classList.add('pulse-active');
+        
+        const micLabel = document.getElementById('mic-label');
+        if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].listening;
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const userInput = document.getElementById('user-input');
+        if (userInput) userInput.value = transcript;
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech Recognition Error:", event.error);
+        stopMicUI();
+    };
+
+    recognition.onend = () => { 
+        stopMicUI();
+        const userInput = document.getElementById('user-input');
+        if (userInput && userInput.value) submitQuery(); 
+    };
 }
 
-// --- UI UPDATES & CENTERING ---
+function stopMicUI() {
+    const micContainer = document.getElementById('mic-container');
+    if (micContainer) micContainer.classList.remove('pulse-active');
+    
+    const micLabel = document.getElementById('mic-label');
+    if (micLabel) micLabel.textContent = UI_TEXT[currentLanguage].tap;
+}
+
+// --- CORE FUNCTIONS ---
 function updateFullUI() {
     const t = UI_TEXT[currentLanguage];
-    if (document.getElementById('nav-home')) document.getElementById('nav-home').textContent = t.home;
-    if (document.getElementById('nav-hist')) document.getElementById('nav-hist').textContent = t.history;
-    if (document.getElementById('side-recent')) document.getElementById('side-recent').textContent = t.recent;
-    if (document.getElementById('status-text')) document.getElementById('status-text').textContent = t.status;
-    if (document.getElementById('mic-label')) document.getElementById('mic-label').textContent = t.tap;
-    if (document.getElementById('pause-btn')) document.getElementById('pause-btn').textContent = t.stop;
-    if (document.getElementById('grid-label')) document.getElementById('grid-label').textContent = t.try;
+    const elements = {
+        'nav-home': t.home, 'nav-hist': t.history, 'side-recent': t.recent,
+        'status-text': t.status, 'mic-label': t.tap, 'pause-btn': t.stop, 'grid-label': t.try
+    };
+    for (const [id, text] of Object.entries(elements)) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    }
     renderGrid();
 }
 
-// --- RENDER 5X3 COMMAND GRID ---
 function renderGrid() {
     const grid = document.getElementById('command-grid');
     if (!grid) return;
@@ -54,14 +85,14 @@ function renderGrid() {
         chip.className = "suggest-chip";
         chip.textContent = text;
         chip.onclick = () => { 
-            document.getElementById('user-input').value = text; 
+            const input = document.getElementById('user-input');
+            if (input) input.value = text; 
             submitQuery(); 
         };
         grid.appendChild(chip);
     });
 }
 
-// --- SIDEBAR RECENT QUERIES (LIMIT 5) ---
 async function refreshRecentQueries() {
     try {
         const res = await fetch('/api/history');
@@ -73,85 +104,42 @@ async function refreshRecentQueries() {
                 ${item.text.length > 20 ? item.text.substring(0, 20) + '...' : item.text}
             </div>
         `).join('');
-    } catch (e) { console.error("Sidebar update failed", e); }
+    } catch (e) { console.error("Sidebar Error:", e); }
 }
 
-// --- SPEECH RECOGNITION & MIC ANIMATION ---
-if ('webkitSpeechRecognition' in window) {
-    recognition = new webkitSpeechRecognition();
-    recognition.onstart = () => { 
-        document.getElementById('mic-container').classList.add('pulse-active');
-        document.getElementById('mic-label').textContent = UI_TEXT[currentLanguage].listening;
-    };
-    recognition.onresult = (e) => { 
-        document.getElementById('user-input').value = e.results[0][0].transcript; 
-    };
-    recognition.onend = () => { 
-        document.getElementById('mic-container').classList.remove('pulse-active');
-        document.getElementById('mic-label').textContent = UI_TEXT[currentLanguage].tap;
-        if (document.getElementById('user-input').value) submitQuery(); 
-    };
-}
-
-// --- SUBMIT QUERY ---
 async function submitQuery() {
-    const text = document.getElementById('user-input').value;
-    if (!text) return;
+    const userInput = document.getElementById('user-input');
+    if (!userInput || !userInput.value) return;
+    
     const res = await fetch('/api/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: currentLanguage })
+        body: JSON.stringify({ text: userInput.value, language: currentLanguage })
     });
     const data = await res.json();
-    const respSection = document.getElementById('response-section');
-    if (respSection) {
-        document.getElementById('response-text').textContent = data.response;
-        respSection.style.display = 'block';
+    
+    const respBox = document.getElementById('response-section');
+    const respText = document.getElementById('response-text');
+    if (respBox && respText) {
+        respText.textContent = data.response;
+        respBox.style.display = 'block';
     }
-    speakResponse(data.response);
+    
+    // Text-to-Speech
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(data.response);
+    utt.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
+    window.speechSynthesis.speak(utt);
+    
     refreshRecentQueries();
-}
-
-// --- HISTORY PAGE LOGS & PAGINATION ---
-async function fetchHistoryLogs() {
-    const tbody = document.getElementById('history-body');
-    if (!tbody) return;
-    const res = await fetch('/api/history');
-    const allData = await res.json();
-    const start = (currentPage - 1) * itemsPerPage;
-    const paginatedData = allData.slice(start, start + itemsPerPage);
-    
-    tbody.innerHTML = paginatedData.map(item => `
-        <tr>
-            <td style="color:var(--primary); font-weight:800;">${item.time}</td>
-            <td style="font-weight:600;">${item.text}</td>
-            <td><span style="background:rgba(79,70,229,0.1); padding:4px 10px; border-radius:8px; color:var(--primary); font-size:0.75rem;">${item.language.toUpperCase()}</span></td>
-        </tr>
-    `).join('');
-    
-    document.getElementById('page-num').textContent = `Page ${currentPage}`;
-    document.getElementById('prev-btn').disabled = currentPage === 1;
-    document.getElementById('next-btn').disabled = (start + itemsPerPage) >= allData.length;
-}
-
-// --- CLEAR HISTORY ---
-async function clearLogs() {
-    if (!confirm("Clear all logs? This cannot be undone.")) return;
-    try {
-        const res = await fetch('/api/clear', { method: 'POST' });
-        const result = await res.json();
-        if (result.status === "success") {
-            location.reload();
-        }
-    } catch (e) { console.error("Clear logs failed", e); }
+    userInput.value = ""; 
 }
 
 // --- INITIALIZATION ---
 window.onload = () => {
     updateFullUI();
     refreshRecentQueries();
-    if (document.getElementById('history-body')) fetchHistoryLogs();
-
+    
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -160,14 +148,13 @@ window.onload = () => {
             updateFullUI();
         };
     });
+
+    const micBtn = document.getElementById('mic-button');
+    if (micBtn) micBtn.onclick = () => { if (recognition) recognition.start(); };
+
+    const pauseBtn = document.getElementById('pause-btn');
+    if (pauseBtn) pauseBtn.onclick = () => { 
+        if (recognition) recognition.stop(); 
+        window.speechSynthesis.cancel(); 
+    };
 };
-
-document.getElementById('mic-button').onclick = () => { recognition.start(); };
-document.getElementById('pause-btn').onclick = () => { recognition.stop(); window.speechSynthesis.cancel(); };
-
-if (document.getElementById('prev-btn')) {
-    document.getElementById('prev-btn').onclick = () => { currentPage--; fetchHistoryLogs(); };
-}
-if (document.getElementById('next-btn')) {
-    document.getElementById('next-btn').onclick = () => { currentPage++; fetchHistoryLogs(); };
-}
