@@ -27,17 +27,11 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark);
 .brand-container { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; }
 .glow-text { font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-.interaction-zone { flex: 1; display: flex; align-items: center; justify-content: center; }
+.interaction-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .interaction-card { width: 100%; max-width: 550px; padding: 2rem; text-align: center; background: var(--glass); border: 1px solid var(--border); border-radius: 32px; backdrop-filter: blur(40px); }
 .inner-circle { width: 90px; height: 90px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 15px auto; box-shadow: 0 0 30px rgba(79, 70, 229, 0.4); position: relative; }
 .pulse-active { background: linear-gradient(135deg, #4f46e5, #a855f7); box-shadow: 0 0 50px rgba(79, 70, 229, 0.7); }
 
-.command-carousel-wrapper { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; width: 100%; }
-.command-carousel-wrapper::-webkit-scrollbar { display: none; }
-.suggest-chip { flex: 0 0 auto; background: var(--glass); border: 1px solid var(--border); padding: 8px 16px; border-radius: 100px; color: #94a3b8; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-.suggest-chip:hover { border-color: var(--primary); color: white; background: rgba(255,255,255,0.05); }
-
-.response-panel { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px; max-height: 200px; overflow-y: auto; text-align: center; }
 .status-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; }
 .pulse-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; animation: pulse-green 2s infinite; }
 @keyframes pulse-green { 0% { transform: scale(0.9); } 70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); } 100% { transform: scale(0.9); } }
@@ -51,3 +45,37 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark);
 .pulse-active #mic-icon { display: none; }
 .bar { width: 3px; height: 12px; background: #ffffff; border-radius: 10px; animation: wave 1s infinite; }
 @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 30px; } }
+
+/* --- NEW FIXES ADDED BELOW WITHOUT TOUCHING THE ABOVE --- */
+
+/* Static 5x3 Grid for Suggestions */
+.command-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 30px;
+}
+.suggest-chip {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    padding: 10px;
+    border-radius: 12px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+.suggest-chip:hover { border-color: var(--primary); color: white; background: rgba(255,255,255,0.05); }
+
+/* History Page Table & Pagination Fix */
+.history-table { width: 100%; border-collapse: collapse; margin-top: 2rem; background: var(--glass); border-radius: 16px; overflow: hidden; }
+.history-table th, .history-table td { padding: 1.2rem; text-align: left; border-bottom: 1px solid var(--border); color: #f8fafc; }
+.history-table th { background: rgba(255,255,255,0.05); color: var(--primary); font-size: 0.8rem; text-transform: uppercase; }
+
+.pagination { margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+.page-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
